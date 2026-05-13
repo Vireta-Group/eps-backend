@@ -1,0 +1,491 @@
+Academic Management Module
+— Complete Functional Requirements
+________________________________________
+১. School Setup & Onboarding Wizard
+Initial Setup
+●	নতুন স্কুল Register করার পরে Step-by-step Setup Wizard চালু হবে
+●	প্রতিটি Step Complete হলে পরেরটা Unlock হবে
+●	যেকোনো Step Skip করা যাবে, পরে Dashboard থেকে Complete করা যাবে
+●	Setup Progress Percentage দেখাবে (যেমন: ৬০% Setup Complete)
+●	Setup Incomplete থাকলে Dashboard এ Reminder দেখাবে
+Setup Wizard Steps
+●	Step 1: School Basic Info (নাম, লোগো, ঠিকানা, Contact, Website)
+●	Step 2: Academic Year তৈরি
+●	Step 3: Working Day ও Holiday নির্ধারণ
+●	Step 4: Language ও Timezone নির্ধারণ
+●	Step 5: Class ও Section তৈরি
+●	Step 6: Subject তৈরি
+●	Step 7: Teacher যোগ করা
+●	Step 8: Student Import বা যোগ করা
+●	Step 9: Fee Structure সেট করা
+●	Step 10: Notification Setup
+School Profile
+●	স্কুলের নাম বাংলা ও ইংরেজিতে আলাদাভাবে
+●	স্কুলের লোগো Upload (Crop সুবিধা সহ)
+●	স্কুলের ধরন নির্ধারণ: Primary, High School, College, Madrasa, Kindergarten
+●	EIIN Number
+●	Board Affiliation (ঢাকা, চট্টগ্রাম, রাজশাহী, মাদ্রাসা বোর্ড)
+●	MPO Status
+●	স্থাপনের সাল
+●	প্রধান শিক্ষকের নাম ও পরিচিতি
+●	স্কুলের ঠিকানা (বিভাগ, জেলা, উপজেলা, গ্রাম)
+●	যোগাযোগ নম্বর ও Email
+●	Website ও Social Media Link
+●	Google Map Location Pin
+________________________________________
+২. Academic Year Management
+Academic Year তৈরি
+●	School Admin নতুন Academic Year তৈরি করতে পারবে
+●	Academic Year এর নাম নির্ধারণ করা যাবে (যেমন: 2025, 2025-26)
+●	Start Date ও End Date নির্ধারণ করতে হবে
+●	Start Date অবশ্যই End Date এর আগে হতে হবে
+●	একই স্কুলে Overlapping Academic Year তৈরি করা যাবে না
+●	Academic Year তৈরির সময় আগের বছরের Structure Copy করার Option থাকবে:
+○	শুধু Class ও Section Copy
+○	Class, Section ও Subject Copy
+○	Class, Section, Subject ও Routine Copy
+○	শিক্ষার্থী বাদে সব Copy
+Current Academic Year
+●	একটি সময়ে শুধু একটি Academic Year Active থাকবে
+●	নতুন Academic Year Activate করলে আগেরটা স্বয়ংক্রিয়ভাবে Inactive হবে
+●	Activation এর আগে Confirmation নিতে হবে
+●	Current Academic Year সব পেজের Header এ দেখাবে
+Academic Year Archive
+●	Academic Year ডিলিট করা যাবে না, শুধু Archive করা যাবে
+●	Archive করা Academic Year এর সব ডেটা Read-Only হবে
+●	Archive করা যেকোনো বছরের ডেটা দেখা যাবে
+●	Archive করার আগে সব Pending কাজ Complete করার Warning দেখাবে
+Academic Year Transition
+●	বছর শেষে নতুন Year এ Transition এর Checklist থাকবে:
+○	সব Result Publish হয়েছে কিনা
+○	Class Promotion হয়েছে কিনা
+○	Fee বকেয়া Settle হয়েছে কিনা
+○	Library বই Return হয়েছে কিনা
+●	Checklist Complete না হলে Warning দেখাবে
+●	Transition এর পরে Old Year Automatically Archive হবে
+________________________________________
+৩. Class Management
+Class তৈরি
+●	School Admin নতুন Class তৈরি করতে পারবে
+●	Class এর তথ্য:
+○	Class নাম (বাংলা ও ইংরেজি)
+○	Numeric Order (Sorting এর জন্য)
+○	Class Type (Regular, Special, Vocational)
+○	Status (Active/Inactive)
+●	একই স্কুলে একই নামের দুটো Class তৈরি করা যাবে না
+●	Class তৈরির সময় সরাসরি Section যোগ করা যাবে
+●	Bulk Class Create — একসাথে Class 1 থেকে Class 10 তৈরি করা যাবে
+●	Class তৈরি হলে সংশ্লিষ্ট শিক্ষকদের Notification যাবে
+Class Edit
+●	Class এর নাম ও Numeric Order পরিবর্তন করা যাবে
+●	নাম পরিবর্তন হলে সিস্টেমের সব জায়গায় Update হবে
+●	পরিবর্তনের ইতিহাস Audit Log এ থাকবে
+Class Inactive ও Delete
+●	শিক্ষার্থী থাকলে Delete করা যাবে না, Inactive করা যাবে
+●	Inactive Class এ নতুন শিক্ষার্থী ভর্তি করা যাবে না
+●	Inactive করলে সেই Class এর সব Section ও Automatically Inactive হবে
+●	সম্পূর্ণ খালি Class Soft Delete করা যাবে
+●	Delete করলে Audit Log এ রেকর্ড থাকবে
+Class List ও Overview
+●	Numeric Order অনুযায়ী সাজানো থাকবে
+●	প্রতিটি Class এ দেখাবে:
+○	মোট Section সংখ্যা
+○	মোট Student সংখ্যা
+○	মোট Subject সংখ্যা
+○	Class Teacher সংখ্যা
+○	Attendance আজকে নেওয়া হয়েছে কিনা
+●	Active/Inactive Filter থাকবে
+●	Class Overview পেজে সব তথ্য এক জায়গায় দেখা যাবে
+Class Duplicate
+●	একটি Class এর Section Structure ও Subject List অন্য Class এ Copy করা যাবে
+●	Duplicate করার সময় কোন কোন তথ্য Copy হবে নির্বাচন করা যাবে
+________________________________________
+৪. Section Management
+Section তৈরি
+●	একটি Class এর অধীনে যতগুলো দরকার Section তৈরি করা যাবে
+●	Section এর তথ্য:
+○	Section নাম (A, B, C বা ক, খ, গ বা Custom)
+○	Maximum Capacity
+○	Class Teacher Assign
+○	Room Number
+○	Shift (Morning/Day/Evening)
+○	Status (Active/Inactive)
+●	একই Class এ একই নামের দুটো Section হবে না
+●	Bulk Section Create — একসাথে A, B, C তৈরি করা যাবে
+●	Section তৈরি হলে Assigned Teacher কে Notification যাবে
+Class Teacher Management
+●	প্রতিটি Section এ একজন Class Teacher Assign করা যাবে
+●	Assign করার সময় সেই শিক্ষক অন্য Section এ Class Teacher কিনা Check হবে
+●	একজন শিক্ষক একই সময়ে একাধিক Section এর Class Teacher হতে পারবে না
+●	Class Teacher ছাড়াও Section Active করা যাবে (Warning দেখাবে)
+●	Class Teacher পরিবর্তন করলে তারিখসহ ইতিহাস রেকর্ড থাকবে
+●	Inactive শিক্ষককে Class Teacher করা যাবে না
+Capacity Management
+●	প্রতিটি Section এর Maximum Capacity নির্ধারণ করা যাবে
+●	Capacity এর ৮০% পূর্ণ হলে Warning দেখাবে
+●	Capacity সম্পূর্ণ পূর্ণ হলে নতুন ভর্তি Block হবে
+●	Admin Special Permission নিয়ে Override করতে পারবে
+●	বর্তমান ভর্তি সংখ্যা ও বাকি Seat সবসময় দেখাবে
+Shift Management
+●	একটি স্কুলে একাধিক Shift থাকতে পারবে
+●	একই Class এ আলাদা Shift এর আলাদা Section থাকতে পারবে
+●	Shift অনুযায়ী Routine ও Attendance আলাদা থাকবে
+●	Shift এর Start Time ও End Time নির্ধারণ করা যাবে
+Section Reorder
+●	Drag and Drop করে Section এর ক্রম পরিবর্তন করা যাবে
+Section Merge
+●	দুটো Section একত্রিত করা যাবে
+●	Merge এর সময়:
+○	কোন Section এ শিক্ষার্থীরা যাবে নির্বাচন করতে হবে
+○	Capacity Check হবে
+○	উভয় Section এর ইতিহাস Preserve থাকবে
+●	Merge এর পুরো ইতিহাস রেকর্ড থাকবে
+●	Merge Confirm এর আগে Preview দেখাবে
+Section Split
+●	একটি বড় Section কে দুটোতে ভাগ করা যাবে
+●	Split এর সময় শিক্ষার্থী বিভাজন দুটো পদ্ধতিতে করা যাবে:
+○	Manual: Admin নিজে কে কোথায় যাবে নির্বাচন করবে
+○	Auto: Roll Number অনুযায়ী স্বয়ংক্রিয়ভাবে ভাগ হবে
+●	Split এর পরে নতুন Section এর নাম নির্ধারণ করতে হবে
+Section Inactive ও Delete
+●	শিক্ষার্থী থাকলে Delete করা যাবে না
+●	আগে শিক্ষার্থীদের Transfer করতে হবে
+●	Inactive Section এ নতুন ভর্তি বন্ধ হবে
+●	সম্পূর্ণ খালি Section Soft Delete করা যাবে
+________________________________________
+৫. Subject Management
+Subject তৈরি
+●	School Admin Subject তৈরি করতে পারবে
+●	Subject এর তথ্য:
+○	Subject নাম (বাংলা ও ইংরেজি)
+○	Subject Code
+○	Subject Type (Theory, Practical, Both)
+○	Credit Hour
+○	বাধ্যতামূলক নাকি Optional
+○	Status
+Class অনুযায়ী Subject Assignment
+●	প্রতিটি Class এ কোন কোন Subject পড়ানো হবে নির্ধারণ করা যাবে
+●	Subject এর Full Marks ও Pass Marks নির্ধারণ করা যাবে
+●	Theory ও Practical Marks আলাদাভাবে নির্ধারণ করা যাবে
+●	একটি Class এর Subject List অন্য Class এ Copy করা যাবে
+●	Subject যোগ বা বাদ দিলে পুরোনো Marks ডেটা অক্ষুণ্ণ থাকবে
+Section অনুযায়ী Subject Teacher Assign
+●	প্রতিটি Section এ Subject অনুযায়ী Teacher Assign করা যাবে
+●	একই Subject আলাদা Section এ আলাদা Teacher পড়াতে পারবে
+●	Teacher পরিবর্তন করলে ইতিহাস রেকর্ড থাকবে
+●	Teacher Assign না থাকলে Warning দেখাবে
+●	একজন Teacher কতটি Section এ কতটি Subject পড়াচ্ছেন Workload Overview দেখা যাবে
+________________________________________
+৬. Student-Section Assignment
+●	ভর্তির সময় শিক্ষার্থীকে Class ও Section এ Assign করতে হবে
+●	একজন শিক্ষার্থী একসময়ে শুধু একটি Section এ থাকবে
+●	Section পরিবর্তন করলে তারিখ ও কারণসহ ইতিহাস রেকর্ড হবে
+●	Bulk Student Transfer — একসাথে একাধিক শিক্ষার্থী Transfer করা যাবে
+●	Transfer এর সময় Attendance ও Marks ইতিহাস আলাদাভাবে সংরক্ষিত থাকবে
+________________________________________
+৭. Class Promotion & Rollback
+Promotion Process
+●	বছর শেষে Result এর ভিত্তিতে Promotion হবে
+●	Promotion এর আগে Result Finalize করতে হবে
+●	Pass শিক্ষার্থীরা পরের Class এ, Fail শিক্ষার্থীরা একই Class এ থাকবে
+●	Promotion এর সময় নতুন Section Auto-assign বা Manual করা যাবে
+●	Bulk Promote করার সুবিধা থাকবে
+●	Promote করার আগে Preview দেখাবে:
+○	কতজন Promote হবে
+○	কতজন একই Class এ থাকবে
+○	কতজন Graduate হবে
+Rollback
+●	Promotion ভুল হলে Rollback করা যাবে
+●	Rollback করলে সব শিক্ষার্থী আগের Class ও Section এ ফিরে যাবে
+●	Rollback এর কারণ রেকর্ড থাকবে
+●	Rollback এর Deadline নির্ধারণ করা যাবে (যেমন: Promotion এর ৭ দিনের মধ্যে)
+Graduate Management
+●	সর্বশেষ Class থেকে Promote হলে Graduate Status পাবে
+●	Graduate শিক্ষার্থীর সম্পূর্ণ ইতিহাস সিস্টেমে থাকবে
+●	Graduate শিক্ষার্থীরা Alumni Module এ Transfer হবে
+________________________________________
+৮. Syllabus Management
+বার্ষিক Syllabus তৈরি
+●	প্রতিটি Class ও Subject এর বার্ষিক Syllabus তৈরি করা যাবে
+●	Syllabus এ থাকবে:
+○	Chapter নাম ও Number
+○	প্রতিটি Chapter এর Topic List
+○	Chapter এর Estimated Teaching Hours
+○	Reference Book ও Page Number
+○	Chapter এর Marks Distribution
+●	Chapter ও Topic এর ক্রম পরিবর্তন করা যাবে (Drag and Drop)
+●	গত বছরের Syllabus Copy করে নতুন বছরের জন্য Edit করা যাবে
+●	Syllabus Publish করার আগে Draft হিসেবে থাকবে
+●	Publish হলে Teacher ও Student দেখতে পারবে
+Chapter ও Topic ভিত্তিক বিভাজন
+●	প্রতিটি Chapter কে একাধিক Topic এ ভাগ করা যাবে
+●	প্রতিটি Topic এর Estimated Duration নির্ধারণ করা যাবে
+●	Topic এ Learning Objective যোগ করা যাবে
+●	Topic এর সাথে Study Material Link করা যাবে
+●	Chapter অনুযায়ী Exam এ Marks Distribution নির্ধারণ করা যাবে
+Syllabus Progress Tracking
+●	Teacher প্রতিটি Topic Complete করলে Mark করবে
+●	Topic Complete করার তারিখ রেকর্ড হবে
+●	Chapter অনুযায়ী Completion Percentage দেখাবে
+●	Subject অনুযায়ী Overall Progress দেখাবে
+●	Admin সব Subject এর Progress একসাথে দেখতে পারবে
+●	Syllabus পিছিয়ে থাকলে Alert দেখাবে
+Teacher অনুযায়ী Completion Status
+●	প্রতিটি Teacher কতটুকু Syllabus Complete করেছে দেখা যাবে
+●	একই Subject এর আলাদা Section এ আলাদা Teacher এর Progress তুলনা করা যাবে
+●	Slow Progress এর Teacher কে Admin Notification দিতে পারবে
+●	Teacher নিজে তার Syllabus Progress Dashboard এ দেখতে পারবে
+Syllabus PDF Generate
+●	প্রতিটি Class ও Subject এর Syllabus PDF Generate হবে
+●	School এর Format অনুযায়ী PDF তৈরি হবে
+●	Bulk Generate — সব Class এর Syllabus একসাথে
+●	Parent ও Student App এ Download করা যাবে
+________________________________________
+৯. Class Routine / Timetable
+Routine তৈরি
+●	প্রতিটি Section এর সাপ্তাহিক Routine তৈরি করা যাবে
+●	Routine তৈরির সময় নির্ধারণ করা যাবে:
+○	প্রতিটি Period এর Duration
+○	Break Period এর সময় ও Duration
+○	Assembly Period
+○	Total Period per Day
+○	Lunch Break
+●	Drag and Drop করে Period সাজানো যাবে
+●	Copy করা যাবে — একটি Section এর Routine অন্য Section এ Copy করা যাবে
+●	গত বছরের Routine Copy করে Edit করা যাবে
+Teacher ও Room Conflict Auto Check
+●	একই Teacher একই সময়ে দুটো Section এ Assign করা যাবে না
+●	একই Room একই সময়ে দুটো Section এ Assign করা যাবে না
+●	Conflict হলে সিস্টেম Error দেখাবে ও Conflict এর বিস্তারিত দেখাবে
+●	Auto Resolve Option থাকবে — সিস্টেম Conflict-free Routine Suggest করবে
+Period Duration নির্ধারণ
+●	প্রতিটি Period এর আলাদা Duration নির্ধারণ করা যাবে
+●	Default Duration সেট করা যাবে
+●	Special Period (Lab, Sports) এর জন্য Double Period সুবিধা থাকবে
+Break ও Assembly Period
+●	Break Period এ কোনো Subject Assign হবে না
+●	Assembly Period আলাদাভাবে Mark করা যাবে
+●	Break ও Assembly এর Duration নির্ধারণ করা যাবে
+Substitute Teacher
+●	কোনো Teacher Absent থাকলে Substitute Teacher Assign করা যাবে
+●	Substitute Assign করার সময় Conflict Check হবে
+●	Substitute Teacher কে Notification যাবে
+●	Substitute ইতিহাস রেকর্ড থাকবে
+●	Frequent Substitute এর Pattern দেখা যাবে
+Routine Publish ও PDF
+●	Routine Draft হিসেবে থাকবে
+●	Publish করলে Teacher, Student ও Parent দেখতে পারবে
+●	Publish হলে সবাইকে Notification যাবে
+●	Routine পরিবর্তন হলে আবার Publish করতে হবে
+●	পরিবর্তন হলে সবাইকে Notification যাবে
+●	Section অনুযায়ী Routine PDF Generate হবে
+●	Teacher অনুযায়ী Routine PDF Generate হবে (সব Section মিলিয়ে)
+●	Bulk Print — সব Section এর Routine একসাথে
+________________________________________
+১০. Homework & Assignment
+Homework তৈরি (Teacher)
+●	Teacher নিজের Assigned Section ও Subject এ Homework দিতে পারবে
+●	Homework এর তথ্য:
+○	Title ও বিবরণ
+○	Subject ও Class
+○	Assigned Section (একটি বা একাধিক)
+○	Assign Date
+○	Submission Deadline
+○	Total Marks (Graded হলে)
+○	Homework Type (Written, Project, Presentation, Research)
+○	Instructions
+●	File Attachment যোগ করা যাবে (PDF, Word, Image, Video)
+●	Homework Draft হিসেবে Save করা যাবে
+●	Publish হলে Student ও Parent কে Notification যাবে
+●	Mobile App থেকে Homework দেওয়া যাবে
+Submission Deadline
+●	Submission Deadline নির্ধারণ করতে হবে
+●	Deadline এর আগে Student কে Reminder Notification যাবে
+●	Deadline পার হলে Late Submission নিয়ম Apply হবে
+●	Teacher Deadline Extend করতে পারবে (কারণসহ)
+●	Extension হলে Student কে Notification যাবে
+Late Submission নিয়ম
+●	Late Submission Allow করা যাবে কিনা Teacher নির্ধারণ করবে
+●	Late Submission এ Marks Penalty নির্ধারণ করা যাবে (যেমন: ১০% কম)
+●	Late Submission এর সর্বোচ্চ সময়সীমা নির্ধারণ করা যাবে
+●	Deadline এর পরে Submission Block করা যাবে
+Student Submission
+●	Student App বা Portal থেকে Homework Submit করতে পারবে
+●	Text, File (PDF, Word, Image) Submit করা যাবে
+●	Submit এর পরে Confirmation দেখাবে
+●	Submit এর পরে Edit করা যাবে (Deadline এর আগে)
+●	Re-submit করার সুবিধা থাকবে (Teacher Allow করলে)
+●	Submission এর সময় রেকর্ড হবে (Late কিনা বোঝার জন্য)
+Teacher Grading ও Feedback
+●	Teacher প্রতিটি Submission দেখতে পারবে
+●	Marks দিতে পারবে
+●	Written Feedback দিতে পারবে
+●	Annotated File Return করতে পারবে
+●	Grade হলে Student কে Notification যাবে
+●	Bulk Grade করার সুবিধা থাকবে
+Submission Status Tracking
+●	Teacher সব Student এর Submission Status দেখতে পারবে:
+○	Submitted (সময়মতো)
+○	Late Submitted
+○	Pending (এখনো দেয়নি)
+○	Graded
+●	Admin সব Teacher এর Homework Activity দেখতে পারবে
+●	Student নিজের সব Homework এর Status দেখতে পারবে
+●	Parent সন্তানের Homework Status দেখতে পারবে
+________________________________________
+১১. Study Material
+Material Upload
+●	Teacher Subject অনুযায়ী Study Material Upload করতে পারবে
+●	Material এর ধরন:
+○	PDF Notes
+○	Word Document
+○	PowerPoint Presentation
+○	Image
+○	Video (Upload বা YouTube/Google Drive Link)
+○	Audio
+○	External Link
+●	Material এর তথ্য:
+○	Title ও বিবরণ
+○	Subject ও Class
+○	Chapter ও Topic (Syllabus এর সাথে Link)
+○	Publish Date
+○	Expiry Date (Optional)
+●	Mobile App থেকে Upload করা যাবে
+Class ও Subject অনুযায়ী সাজানো
+●	Material Class → Subject → Chapter → Topic অনুযায়ী সাজানো থাকবে
+●	Student সহজে নিজের Class ও Subject এর Material খুঁজে পাবে
+●	Search করা যাবে Title বা Topic দিয়ে
+●	Filter করা যাবে Type অনুযায়ী
+Access Permission
+●	Material কে কারা দেখতে পারবে নির্ধারণ করা যাবে:
+○	নির্দিষ্ট Section
+○	পুরো Class
+○	সব Class
+○	শুধু Teacher
+●	Paid Content হিসেবে Mark করা যাবে (Premium Feature)
+●	Material Download Allow বা Disable করা যাবে
+Storage Management
+●	প্রতিটি School এর Storage Limit নির্ধারণ করা যাবে (Plan অনুযায়ী)
+●	Current Storage Usage সবসময় দেখাবে
+●	Storage Limit এর ৮০% হলে Alert যাবে
+●	পুরোনো বা Unused Material Delete করার Suggestion দেবে
+●	Video Compression স্বয়ংক্রিয়ভাবে হবে Storage বাঁচাতে
+Student ও Parent Download
+●	Student ও Parent App থেকে Material Download করতে পারবে
+●	Download ইতিহাস রেকর্ড থাকবে
+●	Offline Access এর জন্য Download করে রাখা যাবে
+●	Download সংখ্যা Teacher দেখতে পারবে
+________________________________________
+১২. Online Class / Virtual Classroom
+Platform Integration
+●	Zoom Integration:
+○	Zoom Account Connect করা যাবে
+○	সরাসরি সিস্টেম থেকে Meeting Create হবে
+○	Meeting ID ও Password Auto Generate
+●	Google Meet Integration:
+○	Google Account Connect করা যাবে
+○	Meet Link Auto Generate
+●	Microsoft Teams Integration (ভবিষ্যত)
+●	Platform Selection School Admin নির্ধারণ করবে
+Class Schedule
+●	Teacher Online Class Schedule তৈরি করতে পারবে
+●	Schedule এ থাকবে:
+○	Class এর Title
+○	Subject ও Section
+○	তারিখ ও সময়
+○	Duration
+○	Platform (Zoom/Meet)
+○	Description
+●	Schedule হলে Student ও Parent কে Notification যাবে
+●	Class এর ১৫ মিনিট আগে Reminder Notification যাবে
+●	Recurring Class Schedule করা যাবে (প্রতি সোমবার)
+Class Link শেয়ার
+●	Meeting Link স্বয়ংক্রিয়ভাবে Generate হবে
+●	Student App এ Link দেখাবে
+●	One Click এ Class Join করা যাবে
+●	Password Protected Link তৈরি করা যাবে
+●	Link এর Expiry নির্ধারণ করা যাবে
+Online Attendance
+●	Class এ Join করলে স্বয়ংক্রিয়ভাবে Attendance Record হবে
+●	কতক্ষণ ছিল সেটা Record হবে
+●	Minimum Duration নির্ধারণ করা যাবে (যেমন: ৭০% সময় থাকলে Present)
+●	Attendance Class এর Attendance Module এ Sync হবে
+Class Recording
+●	Class Record করার সুবিধা থাকবে
+●	Recording সিস্টেমে Save হবে
+●	Recording Student দেখতে পারবে (Teacher Allow করলে)
+●	Recording এর Expiry নির্ধারণ করা যাবে
+●	Recording Storage Limit নির্ধারণ করা যাবে
+Chat ও Q&A
+●	Class চলাকালীন Chat করা যাবে
+●	Chat History সংরক্ষিত থাকবে
+●	Teacher Chat Disable করতে পারবে
+●	Q&A Session পরিচালনা করা যাবে
+●	Hand Raise Feature থাকবে
+Breakout Room
+●	Class কে ছোট ছোট Group এ ভাগ করা যাবে
+●	Teacher প্রতিটি Room Monitor করতে পারবে
+●	Group Assignment দেওয়া যাবে
+●	নির্ধারিত সময় পরে Main Class এ ফিরে আসবে
+________________________________________
+১৩. Co-curricular Activity Management
+Club ও Team তৈরি
+●	School Admin বা Teacher Club বা Team তৈরি করতে পারবে
+●	Club এর তথ্য:
+○	নাম ও বিবরণ
+○	Category (Academic, Cultural, Sports, Social, Religious)
+○	Advisor/Supervisor (Teacher)
+○	Maximum Member সংখ্যা
+○	Meeting Day ও Time
+○	Meeting Room
+○	Status
+●	Team এর তথ্য:
+○	নাম ও Sport/Activity Type
+○	Coach বা Supervisor
+○	Team Size
+○	Practice Schedule
+Member Enrollment
+●	Student Club বা Team এ Apply করতে পারবে
+●	Advisor Approve বা Reject করবে
+●	Reject করলে কারণ দিতে হবে
+●	Enrollment এর Limit পূর্ণ হলে Waitlist এ যাবে
+●	Member List দেখা যাবে
+●	Member Remove করা যাবে (কারণসহ)
+●	একজন Student একাধিক Club এ থাকতে পারবে (Admin Limit নির্ধারণ করবে)
+Activity Schedule
+●	Club বা Team এর Activity Schedule তৈরি করা যাবে
+●	Schedule এ থাকবে:
+○	Activity এর নাম ও বিবরণ
+○	তারিখ ও সময়
+○	Location
+○	Required Items
+●	Schedule Publish হলে Member দের Notification যাবে
+●	Calendar View এ দেখা যাবে
+●	Conflict Check হবে (একই Member একই সময়ে দুটো Activity তে নয়)
+Attendance
+●	প্রতিটি Activity তে Attendance নেওয়া যাবে
+●	Member কতটি Activity তে অংশ নিয়েছে দেখা যাবে
+●	Minimum Attendance নির্ধারণ করা যাবে (Certificate পাওয়ার জন্য)
+Participation Record
+●	প্রতিটি শিক্ষার্থীর Co-curricular Participation Record থাকবে
+●	Inter-school Competition এ Participation রেকর্ড
+●	External Event এ Participation রেকর্ড
+●	Participation Profile তৈরি হবে (Result Card এ দেখাবে)
+Achievement রেকর্ড
+●	Competition এর Result রেকর্ড করা যাবে:
+○	প্রতিযোগিতার নাম
+○	তারিখ ও স্থান
+○	Participant এর নাম
+○	Position বা Award
+○	Photo Upload
+●	Achievement Profile এ ও Result Card এ দেখাবে
+●	School এর Achievement Board এ Showcase হবে
+Certificate Generate
+●	Participation Certificate তৈরি হবে
+●	Achievement Certificate তৈরি হবে
+●	Certificate Template Customize করা যাবে
+●	Digital Certificate QR Code দিয়ে Verify করা যাবে
+●	Bulk Certificate Generate করা যাবে
+________________________________________
+
+

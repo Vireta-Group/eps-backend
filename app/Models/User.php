@@ -2,48 +2,66 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'name',
+        'tenant_id',
+        'user_type',
+        'name_bn',
+        'name_en',
         'email',
-        'password',
+        'phone',
+        'username',
+        'password_hash', // SQL-এ কলামের নাম password_hash
+        'email_verified_at',
+        'phone_verified_at',
+        'profile_photo_url',
+        'language',
+        'timezone',
+        'last_login_at',
+        'last_login_ip',
+        'failed_login_count',
+        'locked_until',
+        'force_password_change',
+        'metadata',
+        'user_status',
+        'status',
+        'is_demo',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
+        'password_hash',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'phone_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'locked_until' => 'datetime',
+            'force_password_change' => 'boolean',
+            'is_demo' => 'boolean',
+            'metadata' => 'array',
+            'password_hash' => 'hashed', // লারাভেল ১২-এ অটো হ্যাস কাস্টিং
         ];
+    }
+
+    /**
+     * লারাভেলের ডিফল্ট 'password' কলামের বদলে 'password_hash' ব্যবহার করার জন্য।
+     */
+    public function getAuthPassword()
+    {
+        return $this->password_hash;
     }
 }
