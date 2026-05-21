@@ -6,6 +6,6 @@
 	<title></title>
 </head>
 <body>
-	<h1>HI I am here</h1>
+	<h1>School Start</h1>
 </body>
 </html>
