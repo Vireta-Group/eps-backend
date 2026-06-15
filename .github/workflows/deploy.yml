@@ -26,16 +26,4 @@ jobs:
             .env
             **/node_modules/
 
-      - name: Run Artisan commands via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || 2222 }}
-          script: |
-            cd /myproject/
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+      # SSH step removed — run artisan commands manually in cPanel Terminal
