@@ -1,8 +1,6 @@
 <?php
 
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
-use Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy;
-use Dedoc\Scramble\Support\Generator\SecurityScheme;
 
 return [
     /*
@@ -164,11 +162,5 @@ return [
      *     ],
      * ],
      */
-    'security_strategy' => [
-        MiddlewareAuthSecurityStrategy::class,
-        [
-            'middleware' => ['auth:sanctum'],
-            'scheme' => SecurityScheme::http('bearer'),
-        ],
-    ],
+    'security_strategy' => null, // Set in AppServiceProvider via Scramble::afterOpenApiGenerated
 ];
