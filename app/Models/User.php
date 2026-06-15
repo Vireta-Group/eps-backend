@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasUuids, SoftDeletes;
+    /** @use HasFactory<UserFactory> */
+    use HasApiTokens, HasFactory, HasUuids, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'tenant_id',
@@ -21,7 +24,9 @@ class User extends Authenticatable
         'email',
         'phone',
         'username',
-        'password_hash', // SQL-এ কলামের নাম password_hash
+        'password_hash',
+        'profile_id',
+        'profile_type',
         'email_verified_at',
         'phone_verified_at',
         'profile_photo_url',
@@ -53,15 +58,17 @@ class User extends Authenticatable
             'force_password_change' => 'boolean',
             'is_demo' => 'boolean',
             'metadata' => 'array',
-            'password_hash' => 'hashed', // লারাভেল ১২-এ অটো হ্যাস কাস্টিং
+            'password_hash' => 'hashed',
         ];
     }
 
-    /**
-     * লারাভেলের ডিফল্ট 'password' কলামের বদলে 'password_hash' ব্যবহার করার জন্য।
-     */
     public function getAuthPassword()
     {
         return $this->password_hash;
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tenant extends Model
@@ -50,13 +52,10 @@ class Tenant extends Model
         'settings',
         'status',
         'is_demo',
-        'profile_id',
-        'profile_type',
         'demo_expires_at',
         'created_by',
         'updated_by',
     ];
-
 
     protected function casts(): array
     {
@@ -77,5 +76,35 @@ class Tenant extends Model
             'onboarding_step' => 'integer',
             'storage_gb' => 'decimal:2',
         ];
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class, 'current_plan_id');
+    }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function settings(): HasMany
+    {
+        return $this->hasMany(TenantSetting::class);
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(TenantAddress::class);
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(TenantContact::class);
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

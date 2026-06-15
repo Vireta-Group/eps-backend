@@ -1243,7 +1243,8 @@ CREATE TRIGGER trg_ip_whitelist_updated_at
     FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
 
 CREATE INDEX idx_ip_whitelist_tenant ON ip_whitelist (tenant_id) WHERE deleted_at IS NULL;
-CREATE INDEX idx_ip_whitelist_range  ON ip_whitelist USING GIST (ip_range) WHERE deleted_at IS NULL;
+-- Skipped: GiST on cidr requires PG15+. Use B-tree for now.
+-- CREATE INDEX idx_ip_whitelist_range ON ip_whitelist USING GIST (ip_range) WHERE deleted_at IS NULL;
 
 -- ------------------------------------------------------------
 -- 35.  audit_logs
@@ -1714,11 +1715,11 @@ VALUES
      '{"mobile_app":true,"biometric":true,"hostel":true,"transport":true,"custom_domain":true}', 2, 'active'),
 
     (gen_random_uuid(), 'Premium',  'premium',  'Full-featured, unlimited scale',
-     10000, 100000, 26000, 2147483647, 2147483647, 2147483647, 2147483647, 100, 20000, 50000, 14,
+     10000, 100000, 26000, 2147483647, 2147483647, 2147483647, 32767, 100, 20000, 50000, 14,
      '{"mobile_app":true,"biometric":true,"hostel":true,"transport":true,"custom_domain":true,"whatsapp":true,"ai":true}', 3, 'active'),
 
     (gen_random_uuid(), 'Enterprise','enterprise','Negotiated custom plan',
-     0, 0, 0, 2147483647, 2147483647, 2147483647, 2147483647, 500, 100000, 500000, 30,
+     0, 0, 0, 2147483647, 2147483647, 2147483647, 32767, 500, 100000, 500000, 30,
      '{"mobile_app":true,"biometric":true,"hostel":true,"transport":true,"custom_domain":true,"whatsapp":true,"ai":true,"dedicated_support":true}', 4, 'active'),
 
     (gen_random_uuid(), 'Demo',     'demo',     'Demo tenant plan (internal)',
