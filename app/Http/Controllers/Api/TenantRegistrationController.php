@@ -83,4 +83,36 @@ class TenantRegistrationController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @param  string  $email  The email address to check.
+     * @return JsonResponse{field: string, value: string, available: bool, message: string}
+     */
+    public function checkEmail(string $email): JsonResponse
+    {
+        $exists = User::where('email', $email)->exists();
+
+        return response()->json([
+            'field' => 'email',
+            'value' => $email,
+            'available' => ! $exists,
+            'message' => $exists ? 'This email is already registered.' : 'Email is available.',
+        ]);
+    }
+
+    /**
+     * @param  string  $phone  The phone number to check.
+     * @return JsonResponse{field: string, value: string, available: bool, message: string}
+     */
+    public function checkPhone(string $phone): JsonResponse
+    {
+        $exists = User::where('phone', $phone)->exists();
+
+        return response()->json([
+            'field' => 'phone',
+            'value' => $phone,
+            'available' => ! $exists,
+            'message' => $exists ? 'This phone number is already registered.' : 'Phone number is available.',
+        ]);
+    }
 }

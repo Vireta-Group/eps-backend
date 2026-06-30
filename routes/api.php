@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\TenantRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [TenantRegistrationController::class, 'register']);
+Route::get('/check/email/{email}', [TenantRegistrationController::class, 'checkEmail']);
+Route::get('/check/phone/{phone}', [TenantRegistrationController::class, 'checkPhone']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
