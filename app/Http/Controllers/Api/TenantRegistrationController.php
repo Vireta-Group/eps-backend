@@ -86,35 +86,46 @@ class TenantRegistrationController extends Controller
     }
 
     /**
-     * @param  Request  $request  Form data with `email` and/or `phone`.
-     * @return JsonResponse{email: {available: bool, message: string}, phone: {available: bool, message: string}}
+     * @param  Request  $request  Form data with `email` field.
+     * @return array{field: string, value: string, available: bool, message: string}
      */
-    public function check(Request $request): JsonResponse
+    public function checkEmail(Request $request): JsonResponse
     {
-        $data = [];
+        $email = $request->input('email');
 
-        if ($email = $request->input('email')) {
-            $exists = User::where('email', $email)->exists();
-            $data['email'] = [
-                'value' => $email,
-                'available' => ! $exists,
-                'message' => $exists ? 'This email is already registered.' : 'Email is available.',
-            ];
+        if (! $email) {
+            return response()->json(['message' => 'The email field is required.'], 422);
         }
 
-        if ($phone = $request->input('phone')) {
-            $exists = User::where('phone', $phone)->exists();
-            $data['phone'] = [
-                'value' => $phone,
-                'available' => ! $exists,
-                'message' => $exists ? 'This phone number is already registered.' : 'Phone number is available.',
-            ];
+        $exists = User::where('email', $email)->exists();
+
+        return response()->json([
+            'field' => 'email',
+            'value' => $email,
+            'available' => ! $exists,
+            'message' => $exists ? 'This email is already registered.' : 'Email is available.',
+        ]);
+    }
+
+    /**
+     * @param  Request  $request  Form data with `phone` field.
+     * @return array{field: string, value: string, available: bool, message: string}
+     */
+    public function checkPhone(Request $request): JsonResponse
+    {
+        $phone = $request->input('phone');
+
+        if (! $phone) {
+            return response()->json(['message' => 'The phone field is required.'], 422);
         }
 
-        if (empty($data)) {
-            return response()->json(['message' => 'Provide at least email or phone.'], 422);
-        }
+        $exists = User::where('phone', $phone)->exists();
 
-        return response()->json($data);
+        return response()->json([
+            'field' => 'phone',
+            'value' => $phone,
+            'available' => ! $exists,
+            'message' => $exists ? 'This phone number is already registered.' : 'Phone number is available.',
+        ]);
     }
 }
