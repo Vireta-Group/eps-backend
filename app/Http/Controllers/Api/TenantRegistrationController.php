@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -85,11 +86,17 @@ class TenantRegistrationController extends Controller
     }
 
     /**
-     * @param  string  $email  The email address to check.
+     * @param  Request  $request  Request containing `value` query param.
      * @return JsonResponse{field: string, value: string, available: bool, message: string}
      */
-    public function checkEmail(string $email): JsonResponse
+    public function checkEmail(Request $request): JsonResponse
     {
+        $email = $request->query('value');
+
+        if (! $email) {
+            return response()->json(['message' => 'The value query parameter is required.'], 422);
+        }
+
         $exists = User::where('email', $email)->exists();
 
         return response()->json([
@@ -101,11 +108,17 @@ class TenantRegistrationController extends Controller
     }
 
     /**
-     * @param  string  $phone  The phone number to check.
+     * @param  Request  $request  Request containing `value` query param.
      * @return JsonResponse{field: string, value: string, available: bool, message: string}
      */
-    public function checkPhone(string $phone): JsonResponse
+    public function checkPhone(Request $request): JsonResponse
     {
+        $phone = $request->query('value');
+
+        if (! $phone) {
+            return response()->json(['message' => 'The value query parameter is required.'], 422);
+        }
+
         $exists = User::where('phone', $phone)->exists();
 
         return response()->json([
