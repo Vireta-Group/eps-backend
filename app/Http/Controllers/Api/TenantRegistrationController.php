@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RegisterRequest;
 use App\Models\Plan;
+use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
 use Dedoc\Scramble\Attributes\Group;
@@ -51,6 +52,20 @@ class TenantRegistrationController extends Controller
                 ]);
 
                 $tenant->update(['created_by' => $user->id]);
+
+                $schoolAdminRole = Role::where('slug', 'school_admin')->first();
+
+                if ($schoolAdminRole) {
+                    DB::table('user_roles')->insert([
+                        'id' => Str::uuid(),
+                        'user_id' => $user->id,
+                        'role_id' => $schoolAdminRole->id,
+                        'scope_type' => 'tenant',
+                        'scope_id' => $tenant->id,
+                        'assigned_at' => now(),
+                        'status' => 'active',
+                    ]);
+                }
 
                 $token = $user->createToken('registration-token')->plainTextToken;
 

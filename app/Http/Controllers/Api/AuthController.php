@@ -26,6 +26,12 @@ class AuthController extends Controller
             ]);
         }
 
+        if (! $user->roles()->exists()) {
+            throw ValidationException::withMessages([
+                'phone' => ['Your account has no active role. Contact support.'],
+            ]);
+        }
+
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
@@ -49,13 +55,14 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load('tenant');
+        $user = $request->user()->load(['tenant', 'roles']);
 
         return response()->json([
             'status' => 'success',
             'data' => [
                 'user' => new UserResource($user),
                 'tenant' => $user->tenant ? new TenantResource($user->tenant) : null,
+                'roles' => $user->roles->pluck('slug'),
             ],
         ]);
     }
