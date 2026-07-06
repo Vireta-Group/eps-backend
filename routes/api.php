@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\OnboardingWizardController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,8 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/upload', [FileUploadController::class, 'upload']);
+
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
@@ -22,6 +25,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('setup')->group(function () {
         Route::get('/status', [OnboardingWizardController::class, 'status']);
         Route::get('/step/{step}', [OnboardingWizardController::class, 'showStep']);
+        Route::post('/step/1', [OnboardingWizardController::class, 'saveStep1']);
+        Route::post('/step/2', [OnboardingWizardController::class, 'saveStep2']);
+        Route::post('/step/3', [OnboardingWizardController::class, 'saveStep3']);
+        Route::post('/step/4', [OnboardingWizardController::class, 'saveStep4']);
         Route::post('/step/{step}', [OnboardingWizardController::class, 'saveStep']);
         Route::post('/finish', [OnboardingWizardController::class, 'finish']);
     });

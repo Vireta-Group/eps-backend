@@ -41,7 +41,7 @@ class TenantFactory extends Factory
     public function onboardingComplete(): static
     {
         return $this->state(fn (array $attributes) => [
-            'onboarding_step' => 5,
+            'onboarding_step' => 4,
             'onboarding_done' => true,
             'tenant_status' => 'active',
         ]);
