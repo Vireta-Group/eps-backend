@@ -20,8 +20,8 @@ class OnboardingWizardController extends Controller
     private const STEPS = [
         1 => 'school_basic_info',
         2 => 'academic_calendar',
-        3 => 'class_section_subject_address',
-        4 => 'fee_notification_branding',
+        3 => 'address_principal',
+        4 => 'notification_branding',
     ];
 
     private function getTenant(Request $request): Tenant
@@ -62,14 +62,6 @@ class OnboardingWizardController extends Controller
                 'holidays.*' => ['string', 'max:200'],
             ],
             3 => [
-                'classes' => ['required', 'array', 'min:1'],
-                'classes.*.name' => ['required', 'string', 'max:100'],
-                'classes.*.sections' => ['nullable', 'array'],
-                'classes.*.sections.*' => ['string', 'max:50'],
-                'subjects' => ['nullable', 'array'],
-                'subjects.*.name' => ['required_with:subjects', 'string', 'max:100'],
-                'subjects.*.code' => ['nullable', 'string', 'max:50'],
-                'subjects.*.type' => ['nullable', 'string', 'in:theory,practical,both'],
                 'address' => ['nullable', 'array'],
                 'address.division' => ['nullable', 'string', 'max:100'],
                 'address.district' => ['nullable', 'string', 'max:100'],
@@ -84,10 +76,6 @@ class OnboardingWizardController extends Controller
                 'principal.email' => ['nullable', 'email', 'max:200'],
             ],
             4 => [
-                'fee_types' => ['required', 'array', 'min:1'],
-                'fee_types.*.name' => ['required', 'string', 'max:100'],
-                'fee_types.*.amount' => ['required', 'numeric', 'min:0'],
-                'fee_types.*.frequency' => ['required', 'string', 'in:monthly,yearly,one_time'],
                 'notifications' => ['nullable', 'array'],
                 'notifications.sms' => ['nullable', 'boolean'],
                 'notifications.email' => ['nullable', 'boolean'],
@@ -138,8 +126,6 @@ class OnboardingWizardController extends Controller
                 'holidays' => ['type' => 'array', 'required' => false, 'items' => ['type' => 'string']],
             ],
             3 => [
-                'classes' => ['type' => 'array', 'required' => true, 'minItems' => 1, 'itemFields' => ['name' => ['type' => 'string', 'required' => true], 'sections' => ['type' => 'array']]],
-                'subjects' => ['type' => 'array', 'required' => false, 'itemFields' => ['name' => ['type' => 'string', 'required' => true], 'code' => ['type' => 'string'], 'type' => ['type' => 'string', 'enum' => ['theory', 'practical', 'both']]]],
                 'address.division' => ['type' => 'string', 'required' => false, 'max' => 100],
                 'address.district' => ['type' => 'string', 'required' => false, 'max' => 100],
                 'address.upazila' => ['type' => 'string', 'required' => false, 'max' => 100],
@@ -152,7 +138,6 @@ class OnboardingWizardController extends Controller
                 'principal.email' => ['type' => 'string', 'required' => false, 'format' => 'email'],
             ],
             4 => [
-                'fee_types' => ['type' => 'array', 'required' => true, 'minItems' => 1, 'itemFields' => ['name' => ['type' => 'string', 'required' => true], 'amount' => ['type' => 'number', 'required' => true], 'frequency' => ['type' => 'string', 'required' => true, 'enum' => ['monthly', 'yearly', 'one_time']]]],
                 'notifications.sms' => ['type' => 'boolean', 'required' => false],
                 'notifications.email' => ['type' => 'boolean', 'required' => false],
                 'notifications.push' => ['type' => 'boolean', 'required' => false],
@@ -321,10 +306,9 @@ class OnboardingWizardController extends Controller
     }
 
     /**
-     * Save onboarding step 3 — Class, Section, Subject & Address.
+     * Save onboarding step 3 — Address & Principal Info.
      *
-     * **Required:** classes (array with at least 1 item having `name`)
-     * **Optional:** subjects, address (division, district, upazila, village_area, google_map_url),
+     * **Optional:** address (division, district, upazila, village_area, google_map_url),
      * principal (name_en, name_bn, designation, mobile, email)
      *
      * @operationId saveOnboardingStep3
@@ -332,14 +316,6 @@ class OnboardingWizardController extends Controller
     public function saveStep3(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'classes' => ['required', 'array', 'min:1'],
-            'classes.*.name' => ['required', 'string', 'max:100'],
-            'classes.*.sections' => ['nullable', 'array'],
-            'classes.*.sections.*' => ['string', 'max:50'],
-            'subjects' => ['nullable', 'array'],
-            'subjects.*.name' => ['required_with:subjects', 'string', 'max:100'],
-            'subjects.*.code' => ['nullable', 'string', 'max:50'],
-            'subjects.*.type' => ['nullable', 'string', 'in:theory,practical,both'],
             'address' => ['nullable', 'array'],
             'address.division' => ['nullable', 'string', 'max:100'],
             'address.district' => ['nullable', 'string', 'max:100'],
@@ -358,9 +334,8 @@ class OnboardingWizardController extends Controller
     }
 
     /**
-     * Save onboarding step 4 — Fee, Notification & Branding.
+     * Save onboarding step 4 — Notification & Branding.
      *
-     * **Required:** fee_types (array with at least 1 item having name, amount, frequency)
      * **Optional:** notifications (sms, email, push, whatsapp),
      * primary_color, secondary_color, accent_color, logo_primary_url, logo_landscape_url,
      * logo_dark_url, favicon_url, font_family, custom_css
@@ -370,10 +345,6 @@ class OnboardingWizardController extends Controller
     public function saveStep4(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'fee_types' => ['required', 'array', 'min:1'],
-            'fee_types.*.name' => ['required', 'string', 'max:100'],
-            'fee_types.*.amount' => ['required', 'numeric', 'min:0'],
-            'fee_types.*.frequency' => ['required', 'string', 'in:monthly,yearly,one_time'],
             'notifications' => ['nullable', 'array'],
             'notifications.sms' => ['nullable', 'boolean'],
             'notifications.email' => ['nullable', 'boolean'],
@@ -495,14 +466,6 @@ class OnboardingWizardController extends Controller
 
     private function persistStep3(Tenant $tenant, array $data): void
     {
-        $settingData = collect($data)->only([
-            'classes', 'subjects',
-        ])->filter(fn ($v) => ! is_null($v))->toArray();
-
-        if (! empty($settingData)) {
-            $this->saveSetting($tenant, 'step_3', $settingData);
-        }
-
         if (isset($data['address'])) {
             TenantAddress::updateOrCreate(
                 ['tenant_id' => $tenant->id, 'address_type' => 'main'],
@@ -531,7 +494,7 @@ class OnboardingWizardController extends Controller
     private function persistStep4(Tenant $tenant, array $data): void
     {
         $settingData = collect($data)->only([
-            'fee_types', 'notifications',
+            'notifications',
         ])->filter(fn ($v) => ! is_null($v))->toArray();
 
         if (! empty($settingData)) {

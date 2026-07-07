@@ -81,7 +81,7 @@ class OnboardingWizardTest extends TestCase
     {
         $response = $this->withToken($this->token)
             ->postJson('/api/setup/step/4', [
-                'fee_types' => [['name' => 'Tuition', 'amount' => 1000, 'frequency' => 'monthly']],
+                'notifications' => ['sms' => true],
             ]);
 
         $response->assertStatus(422);
@@ -107,7 +107,7 @@ class OnboardingWizardTest extends TestCase
                 'status' => 'success',
                 'data' => [
                     'step' => 3,
-                    'name' => 'class_section_subject_address',
+                    'name' => 'address_principal',
                 ],
             ]);
     }
@@ -117,8 +117,6 @@ class OnboardingWizardTest extends TestCase
         $this->tenant->update(['onboarding_step' => 3]);
 
         $data = [
-            'classes' => [['name' => 'Six', 'sections' => ['A', 'B']]],
-            'subjects' => [['name' => 'English', 'code' => 'ENG101', 'type' => 'theory']],
             'address' => [
                 'division' => 'Dhaka',
                 'district' => 'Dhaka',
@@ -160,7 +158,6 @@ class OnboardingWizardTest extends TestCase
 
         $response = $this->withToken($this->token)
             ->postJson('/api/setup/step/4', [
-                'fee_types' => [['name' => 'Tuition', 'amount' => 1000, 'frequency' => 'monthly']],
                 'notifications' => ['sms' => true, 'email' => true],
                 'primary_color' => '#2563EB',
                 'secondary_color' => '#64748B',

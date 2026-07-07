@@ -44,4 +44,5 @@ CLAUDE.md
 .git
 /fullplane/*
 /fullplane
+/api.json
 

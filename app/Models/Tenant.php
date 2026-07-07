@@ -103,6 +103,11 @@ class Tenant extends Model
         return $this->hasMany(TenantContact::class);
     }
 
+    public function academicYears(): HasMany
+    {
+        return $this->hasMany(AcademicYear::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

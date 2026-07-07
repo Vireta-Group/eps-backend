@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AcademicYearController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\OnboardingWizardController;
@@ -31,5 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/step/4', [OnboardingWizardController::class, 'saveStep4']);
         Route::post('/step/{step}', [OnboardingWizardController::class, 'saveStep']);
         Route::post('/finish', [OnboardingWizardController::class, 'finish']);
+    });
+
+    Route::prefix('academic')->name('academic.')->group(function () {
+        Route::get('/years', [AcademicYearController::class, 'index'])->name('years.index');
+        Route::post('/years', [AcademicYearController::class, 'store'])->name('years.store');
+        Route::get('/years/{year}', [AcademicYearController::class, 'show'])->name('years.show');
+        Route::post('/years/{year}/activate', [AcademicYearController::class, 'activate'])->name('years.activate');
+        Route::post('/years/{year}/archive', [AcademicYearController::class, 'archive'])->name('years.archive');
+        Route::post('/years/{year}/copy', [AcademicYearController::class, 'copy'])->name('years.copy');
     });
 });
