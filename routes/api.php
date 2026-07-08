@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AcademicYearController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ClassController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\OnboardingWizardController;
 use App\Http\Controllers\Api\TenantRegistrationController;
@@ -41,5 +42,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/years/{year}/activate', [AcademicYearController::class, 'activate'])->name('years.activate');
         Route::post('/years/{year}/archive', [AcademicYearController::class, 'archive'])->name('years.archive');
         Route::post('/years/{year}/copy', [AcademicYearController::class, 'copy'])->name('years.copy');
+
+        Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
+        Route::post('/classes', [ClassController::class, 'store'])->name('classes.store');
+        Route::get('/classes/{school_class}', [ClassController::class, 'show'])->name('classes.show');
+        Route::post('/classes/{school_class}/activate', [ClassController::class, 'activate'])->name('classes.activate');
+        Route::post('/classes/{school_class}/inactivate', [ClassController::class, 'inactivate'])->name('classes.inactivate');
+        Route::post('/classes/{school_class}/delete', [ClassController::class, 'delete'])->name('classes.delete');
     });
 });
