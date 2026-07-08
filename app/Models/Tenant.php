@@ -108,6 +108,16 @@ class Tenant extends Model
         return $this->hasMany(AcademicYear::class);
     }
 
+    public function schoolSections(): HasMany
+    {
+        return $this->hasMany(SchoolSection::class);
+    }
+
+    public function subjects(): HasMany
+    {
+        return $this->hasMany(Subject::class);
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClassController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\OnboardingWizardController;
+use App\Http\Controllers\Api\SectionController;
+use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,5 +51,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/classes/{school_class}/activate', [ClassController::class, 'activate'])->name('classes.activate');
         Route::post('/classes/{school_class}/inactivate', [ClassController::class, 'inactivate'])->name('classes.inactivate');
         Route::post('/classes/{school_class}/delete', [ClassController::class, 'delete'])->name('classes.delete');
+
+        Route::get('/sections', [SectionController::class, 'index'])->name('sections.index');
+        Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');
+        Route::get('/sections/{section}', [SectionController::class, 'show'])->name('sections.show');
+        Route::post('/sections/{section}/activate', [SectionController::class, 'activate'])->name('sections.activate');
+        Route::post('/sections/{section}/inactivate', [SectionController::class, 'inactivate'])->name('sections.inactivate');
+        Route::post('/sections/{section}/delete', [SectionController::class, 'delete'])->name('sections.delete');
+
+        Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+        Route::post('/subjects', [SubjectController::class, 'store'])->name('subjects.store');
+        Route::get('/subjects/{subject}', [SubjectController::class, 'show'])->name('subjects.show');
+        Route::post('/subjects/{subject}/activate', [SubjectController::class, 'activate'])->name('subjects.activate');
+        Route::post('/subjects/{subject}/inactivate', [SubjectController::class, 'inactivate'])->name('subjects.inactivate');
+        Route::post('/subjects/{subject}/delete', [SubjectController::class, 'delete'])->name('subjects.delete');
     });
 });
