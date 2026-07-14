@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\StudentDocumentController;
 use App\Http\Controllers\Api\StudentPhotoController;
 use App\Http\Controllers\Api\StudentTimelineController;
 use App\Http\Controllers\Api\SubjectController;
+use App\Http\Controllers\Api\LeaveController;
+use App\Http\Controllers\Api\TeacherAttendanceController;
+use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use App\Http\Controllers\Api\TransferCertificateController;
 use Illuminate\Support\Facades\Route;
@@ -210,5 +213,67 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/health-summary', [ReportController::class, 'healthSummary']);
         Route::get('/attendance-summary', [ReportController::class, 'attendanceSummary']);
         Route::get('/behaviour-summary', [ReportController::class, 'behaviourSummary']);
+    });
+
+    Route::prefix('teachers')->group(function () {
+        Route::get('/', [TeacherController::class, 'index']);
+        Route::post('/', [TeacherController::class, 'store']);
+
+        Route::post('/assign-subject', [TeacherController::class, 'assignSubject']);
+        Route::post('/subject-assignments/{assignment}/remove', [TeacherController::class, 'removeSubjectAssignment']);
+
+        Route::post('/assign-class-teacher', [TeacherController::class, 'assignClassTeacher']);
+        Route::get('/class-teacher-assignments', [TeacherController::class, 'classTeacherAssignments']);
+        Route::post('/class-teacher-assignments/{assignment}/remove', [TeacherController::class, 'removeClassTeacherAssignment']);
+
+        Route::get('/workload', [TeacherController::class, 'workload']);
+
+        Route::get('/{teacher}', [TeacherController::class, 'show']);
+        Route::post('/{teacher}/update', [TeacherController::class, 'update']);
+        Route::post('/{teacher}/activate', [TeacherController::class, 'activate']);
+        Route::post('/{teacher}/inactivate', [TeacherController::class, 'inactivate']);
+
+        Route::get('/{teacher}/qualifications', [TeacherController::class, 'qualifications']);
+        Route::post('/{teacher}/qualifications', [TeacherController::class, 'addQualification']);
+        Route::post('/{teacher}/qualifications/{qualification}/delete', [TeacherController::class, 'deleteQualification']);
+
+        Route::get('/{teacher}/trainings', [TeacherController::class, 'trainings']);
+        Route::post('/{teacher}/trainings', [TeacherController::class, 'addTraining']);
+        Route::post('/{teacher}/trainings/{training}/delete', [TeacherController::class, 'deleteTraining']);
+
+        Route::get('/{teacher}/experiences', [TeacherController::class, 'experiences']);
+        Route::post('/{teacher}/experiences', [TeacherController::class, 'addExperience']);
+        Route::post('/{teacher}/experiences/{experience}/delete', [TeacherController::class, 'deleteExperience']);
+
+        Route::get('/{teacher}/documents', [TeacherController::class, 'documents']);
+        Route::post('/{teacher}/documents', [TeacherController::class, 'addDocument']);
+        Route::post('/{teacher}/documents/{document}/verify', [TeacherController::class, 'verifyDocument']);
+        Route::post('/{teacher}/documents/{document}/delete', [TeacherController::class, 'deleteDocument']);
+
+        Route::get('/{teacher}/subject-assignments', [TeacherController::class, 'subjectAssignments']);
+    });
+
+    Route::prefix('teacher-attendance')->controller(TeacherAttendanceController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'mark');
+        Route::get('/{attendance}', 'show')->whereUuid('attendance');
+        Route::get('/regularizations', 'regularizations');
+        Route::post('/regularizations', 'requestRegularization');
+        Route::post('/regularizations/{regularization}/review', 'reviewRegularization')->whereUuid('regularization');
+        Route::get('/reports/daily', 'dailyReport');
+        Route::get('/reports/monthly', 'monthlyReport');
+    });
+
+    Route::prefix('leaves')->controller(LeaveController::class)->group(function () {
+        Route::get('/types', 'leaveTypes');
+        Route::post('/types', 'storeLeaveType');
+        Route::post('/types/{leaveType}/update', 'updateLeaveType')->whereUuid('leaveType');
+        Route::post('/types/{leaveType}/delete', 'deleteLeaveType')->whereUuid('leaveType');
+        Route::get('/balances', 'balances');
+        Route::post('/balances', 'createBalance');
+        Route::get('/applications', 'applications');
+        Route::post('/apply', 'apply');
+        Route::post('/applications/{application}/review', 'review')->whereUuid('application');
+        Route::post('/applications/{application}/cancel', 'cancel')->whereUuid('application');
     });
 });

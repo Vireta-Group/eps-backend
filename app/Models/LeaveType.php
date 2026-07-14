@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class LeaveType extends Model
+{
+    use HasFactory, HasUuids;
+
+    protected $fillable = [
+        'tenant_id',
+        'leave_type_name',
+        'leave_type_name_bn',
+        'description',
+        'default_days',
+        'is_paid',
+        'is_active',
+        'is_demo',
+        'created_by',
+    ];
+
+    protected $hidden = [
+        'created_by',
+        'updated_at',
+        'is_demo',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_paid' => 'boolean',
+            'is_active' => 'boolean',
+            'is_demo' => 'boolean',
+            'default_days' => 'integer',
+        ];
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+}
