@@ -127,6 +127,68 @@ class ClassTest extends TestCase
             ]);
     }
 
+    public function test_can_update_class(): void
+    {
+        $class = SchoolClass::factory()->withTenant($this->tenant)->create([
+            'class_name' => 'Six',
+            'class_type' => 'regular',
+        ]);
+
+        $response = $this->withToken($this->token)
+            ->postJson("/api/academic/classes/{$class->id}/update", [
+                'class_name' => 'Six Updated',
+                'class_type' => 'vocational',
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'data' => [
+                    'class_name' => 'Six Updated',
+                    'class_type' => 'vocational',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('school_classes', [
+            'id' => $class->id,
+            'class_name' => 'Six Updated',
+        ]);
+    }
+
+    public function test_partial_class_update(): void
+    {
+        $class = SchoolClass::factory()->withTenant($this->tenant)->create([
+            'class_name' => 'Six',
+            'class_name_bn' => null,
+        ]);
+
+        $this->withToken($this->token)
+            ->postJson("/api/academic/classes/{$class->id}/update", [
+                'class_name_bn' => 'ষষ্ঠ',
+            ]);
+
+        $class->refresh();
+        $this->assertEquals('Six', $class->class_name);
+        $this->assertEquals('ষষ্ঠ', $class->class_name_bn);
+    }
+
+    public function test_update_class_duplicate_name_fails(): void
+    {
+        SchoolClass::factory()->withTenant($this->tenant)->create([
+            'class_name' => 'Six',
+        ]);
+        $class = SchoolClass::factory()->withTenant($this->tenant)->create([
+            'class_name' => 'Seven',
+        ]);
+
+        $response = $this->withToken($this->token)
+            ->postJson("/api/academic/classes/{$class->id}/update", [
+                'class_name' => 'Six',
+            ]);
+
+        $response->assertStatus(422);
+    }
+
     public function test_can_activate_class(): void
     {
         $class = SchoolClass::factory()->withTenant($this->tenant)->inactive()->create();

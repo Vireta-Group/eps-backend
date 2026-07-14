@@ -132,6 +132,53 @@ class SectionTest extends TestCase
             ]);
     }
 
+    public function test_can_update_section(): void
+    {
+        $class = SchoolClass::factory()->withTenant($this->tenant)->create();
+        $section = SchoolSection::factory()->withClass($class)->create([
+            'section_name' => 'A',
+            'shift' => 'morning',
+        ]);
+
+        $response = $this->withToken($this->token)
+            ->postJson("/api/academic/sections/{$section->id}/update", [
+                'section_name' => 'A Updated',
+                'shift' => 'day',
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'data' => [
+                    'section_name' => 'A Updated',
+                    'shift' => 'day',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('school_sections', [
+            'id' => $section->id,
+            'section_name' => 'A Updated',
+        ]);
+    }
+
+    public function test_partial_section_update(): void
+    {
+        $class = SchoolClass::factory()->withTenant($this->tenant)->create();
+        $section = SchoolSection::factory()->withClass($class)->create([
+            'section_name' => 'A',
+            'max_capacity' => 30,
+        ]);
+
+        $this->withToken($this->token)
+            ->postJson("/api/academic/sections/{$section->id}/update", [
+                'max_capacity' => 50,
+            ]);
+
+        $section->refresh();
+        $this->assertEquals('A', $section->section_name);
+        $this->assertEquals(50, $section->max_capacity);
+    }
+
     public function test_can_activate_section(): void
     {
         $class = SchoolClass::factory()->withTenant($this->tenant)->create();

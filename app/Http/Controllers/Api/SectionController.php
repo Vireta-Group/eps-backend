@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management')]
+#[Group('Academic Management > Sections', description: 'Manage class sections with shift type (Morning/Day/Evening).', weight: 43)]
 class SectionController extends Controller
 {
     /**
@@ -101,6 +101,51 @@ class SectionController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $section,
+        ]);
+    }
+
+    /**
+     * Update a section.
+     *
+     * All fields are optional — only send what needs to change.
+     *
+     * @operationId section.update
+     */
+    public function update(Request $request, SchoolSection $section): JsonResponse
+    {
+        $this->ensureTenantOwnership($request, $section);
+
+        $tenant = $request->user()->tenant;
+
+        $validated = $request->validate([
+            'school_class_id' => ['sometimes', 'required', 'uuid', 'exists:school_classes,id'],
+            'section_name' => [
+                'sometimes', 'required', 'string', 'max:100',
+                Rule::unique('school_sections', 'section_name')
+                    ->where('tenant_id', $tenant->id)
+                    ->where('school_class_id', $request->school_class_id ?? $section->school_class_id)
+                    ->whereNull('deleted_at')
+                    ->ignore($section->id),
+            ],
+            'section_name_bn' => ['nullable', 'string', 'max:200'],
+            'max_capacity' => ['nullable', 'integer', 'min:1'],
+            'class_teacher_id' => ['nullable', 'uuid'],
+            'room_number' => ['nullable', 'string', 'max:50'],
+            'shift' => ['nullable', Rule::in(['morning', 'day', 'evening'])],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        if ($request->filled('school_class_id')) {
+            $this->ensureClassOwnership($request, $validated['school_class_id']);
+        }
+
+        $validated['updated_by'] = $request->user()->id;
+        $section->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Section updated successfully.',
+            'data' => $section->fresh(),
         ]);
     }
 

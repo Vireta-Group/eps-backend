@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management')]
+#[Group('Academic Management > Classes', description: 'Manage class levels (Six-Ten) with type and ordering.', weight: 42)]
 class ClassController extends Controller
 {
     /**
@@ -91,6 +91,43 @@ class ClassController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $schoolClass,
+        ]);
+    }
+
+    /**
+     * Update a class.
+     *
+     * All fields are optional — only send what needs to change.
+     * `numeric_order` is NOT updated here (use reorder endpoint).
+     *
+     * @operationId class.update
+     */
+    public function update(Request $request, SchoolClass $schoolClass): JsonResponse
+    {
+        $this->ensureTenantOwnership($request, $schoolClass);
+
+        $tenant = $request->user()->tenant;
+
+        $validated = $request->validate([
+            'class_name' => [
+                'sometimes', 'required', 'string', 'max:100',
+                Rule::unique('school_classes', 'class_name')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('deleted_at')
+                    ->ignore($schoolClass->id),
+            ],
+            'class_name_bn' => ['nullable', 'string', 'max:200'],
+            'class_type' => ['sometimes', 'required', Rule::in(['regular', 'special', 'vocational'])],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        $validated['updated_by'] = $request->user()->id;
+        $schoolClass->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Class updated successfully.',
+            'data' => $schoolClass->fresh(),
         ]);
     }
 

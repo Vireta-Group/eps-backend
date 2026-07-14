@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management')]
+#[Group('Academic Management > Subjects', description: 'Manage subjects with type (Theory/Practical/Both).', weight: 44)]
 class SubjectController extends Controller
 {
     /**
@@ -97,6 +97,51 @@ class SubjectController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $subject,
+        ]);
+    }
+
+    /**
+     * Update a subject.
+     *
+     * All fields are optional — only send what needs to change.
+     *
+     * @operationId subject.update
+     */
+    public function update(Request $request, Subject $subject): JsonResponse
+    {
+        $this->ensureTenantOwnership($request, $subject);
+
+        $tenant = $request->user()->tenant;
+
+        $validated = $request->validate([
+            'subject_name' => [
+                'sometimes', 'required', 'string', 'max:100',
+                Rule::unique('subjects', 'subject_name')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('deleted_at')
+                    ->ignore($subject->id),
+            ],
+            'subject_name_bn' => ['nullable', 'string', 'max:200'],
+            'subject_code' => [
+                'nullable', 'string', 'max:50',
+                Rule::unique('subjects', 'subject_code')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('deleted_at')
+                    ->ignore($subject->id),
+            ],
+            'subject_type' => ['nullable', Rule::in(['theory', 'practical', 'both'])],
+            'credit_hour' => ['nullable', 'numeric', 'min:0', 'max:99.99'],
+            'is_optional' => ['nullable', 'boolean'],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        $validated['updated_by'] = $request->user()->id;
+        $subject->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Subject updated successfully.',
+            'data' => $subject->fresh(),
         ]);
     }
 

@@ -138,6 +138,68 @@ class SubjectTest extends TestCase
             ]);
     }
 
+    public function test_can_update_subject(): void
+    {
+        $subject = Subject::factory()->withTenant($this->tenant)->create([
+            'subject_name' => 'Mathematics',
+            'subject_type' => 'theory',
+        ]);
+
+        $response = $this->withToken($this->token)
+            ->postJson("/api/academic/subjects/{$subject->id}/update", [
+                'subject_name' => 'Mathematics Advanced',
+                'subject_type' => 'both',
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'data' => [
+                    'subject_name' => 'Mathematics Advanced',
+                    'subject_type' => 'both',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('subjects', [
+            'id' => $subject->id,
+            'subject_name' => 'Mathematics Advanced',
+        ]);
+    }
+
+    public function test_partial_subject_update(): void
+    {
+        $subject = Subject::factory()->withTenant($this->tenant)->create([
+            'subject_name' => 'Mathematics',
+            'credit_hour' => 3,
+        ]);
+
+        $this->withToken($this->token)
+            ->postJson("/api/academic/subjects/{$subject->id}/update", [
+                'credit_hour' => 4,
+            ]);
+
+        $subject->refresh();
+        $this->assertEquals('Mathematics', $subject->subject_name);
+        $this->assertEquals(4, $subject->credit_hour);
+    }
+
+    public function test_update_subject_duplicate_name_fails(): void
+    {
+        Subject::factory()->withTenant($this->tenant)->create([
+            'subject_name' => 'English',
+        ]);
+        $subject = Subject::factory()->withTenant($this->tenant)->create([
+            'subject_name' => 'Mathematics',
+        ]);
+
+        $response = $this->withToken($this->token)
+            ->postJson("/api/academic/subjects/{$subject->id}/update", [
+                'subject_name' => 'English',
+            ]);
+
+        $response->assertStatus(422);
+    }
+
     public function test_can_activate_subject(): void
     {
         $subject = Subject::factory()->withTenant($this->tenant)->inactive()->create();

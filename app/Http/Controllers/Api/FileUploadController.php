@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-#[Group('School Setup & Onboarding')]
+#[Group('School Setup & Onboarding', weight: 30)]
 class FileUploadController extends Controller
 {
     /**

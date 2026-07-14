@@ -41,19 +41,16 @@ return [
 
     'info' => [
         'version' => env('API_VERSION', '1.0.0'),
-        'description' => 'EPS - Education Management System. A comprehensive School SaaS platform supporting academic, financial, HR, and administrative operations.',
+        'description' => 'EPS — Education Management System. A comprehensive School SaaS platform supporting academic, HR, financial, and administrative operations.',
     ],
 
     'ui' => [
         'title' => 'EPS API Documentation',
     ],
 
-    'renderer' => 'elements',
+    'renderer' => 'scalar',
 
     'renderers' => [
-        /*
-         * Stoplight Elements config options: https://docs.stoplight.io/docs/elements/b074dc47b2826-elements-configuration-options
-         */
         'elements' => [
             'view' => 'scramble::docs',
             'theme' => 'light',
@@ -64,18 +61,18 @@ return [
             'layout' => 'responsive',
             'router' => 'hash',
         ],
-        /*
-         * Scalar API reference config options: https://scalar.com/products/api-references/configuration
-         */
         'scalar' => [
             'view' => 'scramble::scalar',
             'cdn' => 'https://cdn.jsdelivr.net/npm/@scalar/api-reference',
-            'theme' => 'laravel',
-            'proxyUrl' => 'https://proxy.scalar.com',
+            'theme' => 'kepler',
             'darkMode' => false,
             'showDeveloperTools' => 'never',
             'agent' => ['disabled' => true],
             'credentials' => 'include',
+            'hideDownloadButton' => false,
+            'hideModels' => false,
+            'withDefaultFonts' => true,
+            'layout' => 'modern',
         ],
     ],
 

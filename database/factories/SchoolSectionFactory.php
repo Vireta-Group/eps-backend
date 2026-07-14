@@ -11,19 +11,12 @@ class SchoolSectionFactory extends Factory
 {
     protected $model = SchoolSection::class;
 
-    private static array $sectionNames = ['A', 'B', 'C'];
-
-    private static int $counter = 0;
-
     public function definition(): array
     {
-        $name = self::$sectionNames[self::$counter % count(self::$sectionNames)];
-        self::$counter++;
-
         return [
             'tenant_id' => Tenant::factory(),
             'school_class_id' => SchoolClass::factory(),
-            'section_name' => $name,
+            'section_name' => $this->faker->bothify('?#'),
             'shift' => SchoolSection::SHIFT_MORNING,
             'is_active' => true,
             'status' => 'active',

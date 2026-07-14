@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-#[Group('School Setup & Onboarding')]
+#[Group('School Setup & Onboarding', weight: 30)]
 class OnboardingWizardController extends Controller
 {
     private const TOTAL_STEPS = 4;

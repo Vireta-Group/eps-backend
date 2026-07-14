@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -79,5 +80,22 @@ class User extends Authenticatable
             ->withPivot(['scope_type', 'scope_id', 'assigned_at', 'status'])
             ->wherePivot('status', 'active')
             ->withTimestamps();
+    }
+
+    public function parentStudents(): HasMany
+    {
+        return $this->hasMany(StudentParent::class, 'user_id');
+    }
+
+    public function children(): BelongsToMany
+    {
+        return $this->belongsToMany(Student::class, 'parent_students', 'user_id', 'student_id')
+            ->withPivot(['relationship', 'is_primary'])
+            ->withTimestamps();
+    }
+
+    public function notificationPrefs(): HasMany
+    {
+        return $this->hasMany(ParentNotificationPref::class, 'user_id');
     }
 }

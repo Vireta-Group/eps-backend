@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-#[Group('Authentication')]
+#[Group('Authentication', weight: 20)]
 class AuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
