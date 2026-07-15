@@ -38,14 +38,21 @@ class TeacherAttendance extends Model
     ];
 
     public const STATUS_PRESENT = 'present';
+
     public const STATUS_ABSENT = 'absent';
+
     public const STATUS_LATE = 'late';
+
     public const STATUS_HALF_DAY = 'half_day';
+
     public const STATUS_ON_LEAVE = 'on_leave';
+
     public const STATUS_EXCUSED = 'excused';
 
     public const SOURCE_MANUAL = 'manual';
+
     public const SOURCE_FINGERPRINT = 'fingerprint';
+
     public const SOURCE_MOBILE = 'mobile';
 
     protected function casts(): array

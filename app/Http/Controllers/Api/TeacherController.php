@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassTeacherAssignment;
-use App\Models\Subject as SubjectModel;
 use App\Models\SubjectTeacherAssignment;
 use App\Models\Teacher;
 use App\Models\TeacherDocument;

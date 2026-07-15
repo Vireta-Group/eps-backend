@@ -38,7 +38,9 @@ class TeacherAttendanceRegularization extends Model
     ];
 
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_APPROVED = 'approved';
+
     public const STATUS_REJECTED = 'rejected';
 
     protected function casts(): array
