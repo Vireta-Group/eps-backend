@@ -20,7 +20,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Teacher Management > Attendance', weight: 56)]
+#[Group('Teacher Management > Attendance', weight: 62)]
 class TeacherAttendanceController extends Controller
 {
     public function __construct(private TeacherAttendanceService $attendance)

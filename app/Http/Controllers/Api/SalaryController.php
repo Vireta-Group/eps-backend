@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-#[Group('Teacher Management > Salary Management', weight: 58)]
+#[Group('Teacher Management > Salary Management', weight: 64)]
 class SalaryController extends Controller
 {
     public function __construct(private TeacherAttendanceService $attendance)
