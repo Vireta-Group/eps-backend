@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\OnboardingWizardController;
 use App\Http\Controllers\Api\ParentPortalController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\SalaryController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\StudentDocumentController;
@@ -256,12 +257,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('teacher-attendance')->controller(TeacherAttendanceController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'mark');
+        Route::post('/bulk', 'bulk');
+        Route::get('/sheet', 'sheet');
+        Route::get('/pending', 'pending');
         Route::get('/{attendance}', 'show')->whereUuid('attendance');
+        Route::post('/{attendance}/update', 'update')->whereUuid('attendance');
+        Route::get('/{attendance}/audit', 'audit')->whereUuid('attendance');
         Route::get('/regularizations', 'regularizations');
         Route::post('/regularizations', 'requestRegularization');
         Route::post('/regularizations/{regularization}/review', 'reviewRegularization')->whereUuid('regularization');
         Route::get('/reports/daily', 'dailyReport');
         Route::get('/reports/monthly', 'monthlyReport');
+        Route::get('/reports/leave-period', 'leavePeriodReport');
+        Route::post('/finalize', 'finalize');
+        Route::get('/finalization', 'finalizationStatus');
+        Route::get('/salary-preview', 'salaryPreview');
+        Route::get('/settings', 'showSettings');
+        Route::post('/settings', 'updateSettings');
+        Route::get('/fingerprints', 'fingerprints');
+        Route::post('/fingerprints', 'enrollFingerprint');
+        Route::post('/fingerprints/{fingerprint}/delete', 'deleteFingerprint')->whereUuid('fingerprint');
+        Route::get('/fingerprint-punches', 'fingerprintPunches');
+        Route::post('/fingerprint-punches', 'storeFingerprintPunches');
+        Route::post('/fingerprint-punches/process', 'processFingerprintPunches');
     });
 
     Route::prefix('leaves')->controller(LeaveController::class)->group(function () {
@@ -275,5 +293,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/apply', 'apply');
         Route::post('/applications/{application}/review', 'review')->whereUuid('application');
         Route::post('/applications/{application}/cancel', 'cancel')->whereUuid('application');
+    });
+
+    Route::prefix('salary')->controller(SalaryController::class)->group(function () {
+        Route::get('/structures', 'structures');
+        Route::post('/structures', 'storeStructure');
+        Route::post('/structures/{structure}/update', 'updateStructure')->whereUuid('structure');
+        Route::post('/structures/{structure}/delete', 'deleteStructure')->whereUuid('structure');
+
+        Route::get('/teacher-salaries', 'salaries');
+        Route::post('/teacher-salaries', 'storeSalary');
+        Route::post('/teacher-salaries/{salary}/update', 'updateSalary')->whereUuid('salary');
+
+        Route::get('/payslips', 'payslips');
+        Route::post('/payslips/generate', 'generatePayslips');
+        Route::post('/payslips/{payslip}/mark-paid', 'markPaid')->whereUuid('payslip');
     });
 });

@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\LeaveType;
 use App\Models\Role;
 use App\Models\Teacher;
+use App\Models\TeacherAttendance;
 use App\Models\TeacherLeaveApplication;
 use App\Models\TeacherLeaveBalance;
 use App\Models\Tenant;
@@ -345,5 +346,150 @@ class LeaveTest extends TestCase
         $response = $this->getJson('/api/leaves/types');
 
         $response->assertUnauthorized();
+    }
+
+    public function test_apply_half_day_leave(): void
+    {
+        $teacher = $this->createTeacher();
+        $leaveType = LeaveType::factory()->withTenant($this->tenant)->create();
+
+        $response = $this->postJson('/api/leaves/apply', [
+            'teacher_id' => $teacher->id,
+            'leave_type_id' => $leaveType->id,
+            'start_date' => today()->addDay()->toDateString(),
+            'end_date' => today()->addDay()->toDateString(),
+            'is_half_day' => true,
+            'half_day_session' => 'morning',
+            'reason' => 'Doctor appointment.',
+        ], ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertCreated()
+            ->assertJson(['status' => 'success']);
+
+        $this->assertDatabaseHas('teacher_leave_applications', [
+            'teacher_id' => $teacher->id,
+            'is_half_day' => true,
+            'half_day_session' => 'morning',
+        ]);
+    }
+
+    public function test_apply_retroactive_leave(): void
+    {
+        $teacher = $this->createTeacher();
+        $leaveType = LeaveType::factory()->withTenant($this->tenant)->create();
+
+        $response = $this->postJson('/api/leaves/apply', [
+            'teacher_id' => $teacher->id,
+            'leave_type_id' => $leaveType->id,
+            'start_date' => today()->subDays(2)->toDateString(),
+            'end_date' => today()->subDay()->toDateString(),
+            'is_emergency' => true,
+            'reason' => 'Emergency at home.',
+        ], ['Authorization' => 'Bearer '.$this->token]);
+
+        $response->assertCreated()
+            ->assertJson(['status' => 'success']);
+
+        $this->assertDatabaseHas('teacher_leave_applications', [
+            'teacher_id' => $teacher->id,
+            'is_emergency' => true,
+        ]);
+    }
+
+    public function test_approve_leave_marks_attendance_and_deducts_balance(): void
+    {
+        $teacher = $this->createTeacher();
+        $leaveType = LeaveType::factory()->withTenant($this->tenant)->create();
+        $year = AcademicYear::factory()->withTenant($this->tenant)->create();
+
+        $balance = TeacherLeaveBalance::create([
+            'tenant_id' => $this->tenant->id,
+            'teacher_id' => $teacher->id,
+            'academic_year_id' => $year->id,
+            'leave_type_id' => $leaveType->id,
+            'total_days' => 10,
+            'used_days' => 0,
+            'remaining_days' => 10,
+        ]);
+
+        $start = today()->addDay();
+        $end = today()->addDays(3);
+
+        $application = TeacherLeaveApplication::factory()->withTenant($this->tenant)->withTeacher($teacher)->create([
+            'leave_type_id' => $leaveType->id,
+            'academic_year_id' => $year->id,
+            'start_date' => $start->toDateString(),
+            'end_date' => $end->toDateString(),
+            'total_days' => 3,
+            'status' => 'pending',
+        ]);
+
+        $this->postJson('/api/leaves/applications/'.$application->id.'/review', [
+            'status' => 'approved',
+        ], ['Authorization' => 'Bearer '.$this->token])->assertOk();
+
+        $this->assertSame(3, TeacherAttendance::where('teacher_id', $teacher->id)
+            ->where('status', 'on_leave')
+            ->count());
+
+        $this->assertDatabaseHas('teacher_attendances', [
+            'teacher_id' => $teacher->id,
+            'attendance_date' => $start->toDateString(),
+            'status' => 'on_leave',
+            'leave_application_id' => $application->id,
+        ]);
+
+        $this->assertDatabaseHas('teacher_leave_balances', [
+            'id' => $balance->id,
+            'used_days' => 3,
+            'remaining_days' => 7,
+        ]);
+    }
+
+    public function test_cancel_approved_leave_restores_balance_and_attendance(): void
+    {
+        $teacher = $this->createTeacher();
+        $leaveType = LeaveType::factory()->withTenant($this->tenant)->create();
+        $year = AcademicYear::factory()->withTenant($this->tenant)->create();
+
+        $balance = TeacherLeaveBalance::create([
+            'tenant_id' => $this->tenant->id,
+            'teacher_id' => $teacher->id,
+            'academic_year_id' => $year->id,
+            'leave_type_id' => $leaveType->id,
+            'total_days' => 10,
+            'used_days' => 0,
+            'remaining_days' => 10,
+        ]);
+
+        $application = TeacherLeaveApplication::factory()->withTenant($this->tenant)->withTeacher($teacher)->create([
+            'leave_type_id' => $leaveType->id,
+            'academic_year_id' => $year->id,
+            'start_date' => today()->addDay()->toDateString(),
+            'end_date' => today()->addDays(2)->toDateString(),
+            'total_days' => 2,
+            'status' => 'pending',
+        ]);
+
+        $this->postJson('/api/leaves/applications/'.$application->id.'/review', [
+            'status' => 'approved',
+        ], ['Authorization' => 'Bearer '.$this->token])->assertOk();
+
+        $this->postJson('/api/leaves/applications/'.$application->id.'/cancel', [], [
+            'Authorization' => 'Bearer '.$this->token,
+        ])->assertOk();
+
+        $this->assertDatabaseHas('teacher_leave_applications', [
+            'id' => $application->id,
+            'status' => 'cancelled',
+        ]);
+
+        $this->assertDatabaseHas('teacher_leave_balances', [
+            'id' => $balance->id,
+            'used_days' => 0,
+            'remaining_days' => 10,
+        ]);
+
+        $this->assertSame(0, TeacherAttendance::where('leave_application_id', $application->id)->count());
     }
 }

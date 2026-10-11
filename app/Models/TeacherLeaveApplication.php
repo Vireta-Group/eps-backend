@@ -21,6 +21,9 @@ class TeacherLeaveApplication extends Model
         'start_date',
         'end_date',
         'total_days',
+        'is_half_day',
+        'half_day_session',
+        'is_emergency',
         'reason',
         'status',
         'reviewed_by',
@@ -44,12 +47,18 @@ class TeacherLeaveApplication extends Model
 
     public const STATUS_CANCELLED = 'cancelled';
 
+    public const HALF_DAY_MORNING = 'morning';
+
+    public const HALF_DAY_AFTERNOON = 'afternoon';
+
     protected function casts(): array
     {
         return [
             'start_date' => 'date:Y-m-d',
             'end_date' => 'date:Y-m-d',
-            'total_days' => 'integer',
+            'total_days' => 'decimal:1',
+            'is_half_day' => 'boolean',
+            'is_emergency' => 'boolean',
             'reviewed_at' => 'datetime',
         ];
     }

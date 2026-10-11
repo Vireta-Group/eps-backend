@@ -34,9 +34,9 @@ class TeacherLeaveBalance extends Model
     protected function casts(): array
     {
         return [
-            'total_days' => 'integer',
-            'used_days' => 'integer',
-            'remaining_days' => 'integer',
+            'total_days' => 'decimal:1',
+            'used_days' => 'decimal:1',
+            'remaining_days' => 'decimal:1',
             'is_demo' => 'boolean',
         ];
     }

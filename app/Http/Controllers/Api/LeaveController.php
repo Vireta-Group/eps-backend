@@ -7,6 +7,7 @@ use App\Models\LeaveType;
 use App\Models\Teacher;
 use App\Models\TeacherLeaveApplication;
 use App\Models\TeacherLeaveBalance;
+use App\Services\TeacherAttendanceService;
 use Carbon\Carbon;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
@@ -17,6 +18,10 @@ use Illuminate\Validation\Rule;
 #[Group('Teacher Management > Leave Management', weight: 57)]
 class LeaveController extends Controller
 {
+    public function __construct(private TeacherAttendanceService $attendance)
+    {
+    }
+
     // ── Leave Types ─────────────────────────────────────────────────────
 
     public function leaveTypes(Request $request): JsonResponse
@@ -210,8 +215,11 @@ class LeaveController extends Controller
             'teacher_id' => ['required', 'uuid', 'exists:teachers,id'],
             'leave_type_id' => ['required', 'uuid', 'exists:leave_types,id'],
             'academic_year_id' => ['nullable', 'uuid', 'exists:academic_years,id'],
-            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'is_half_day' => ['nullable', 'boolean'],
+            'half_day_session' => ['nullable', Rule::in([TeacherLeaveApplication::HALF_DAY_MORNING, TeacherLeaveApplication::HALF_DAY_AFTERNOON])],
+            'is_emergency' => ['nullable', 'boolean'],
             'reason' => ['required', 'string', 'max:2000'],
         ]);
 
@@ -219,11 +227,13 @@ class LeaveController extends Controller
             ->where('id', $validated['teacher_id'])
             ->firstOrFail();
 
+        $isHalfDay = (bool) ($validated['is_half_day'] ?? false);
+
         $start = Carbon::parse($validated['start_date']);
         $end = Carbon::parse($validated['end_date']);
-        $totalDays = $start->diffInDays($end) + 1;
+        $totalDays = $isHalfDay ? 0.5 : ($start->diffInDays($end) + 1);
 
-        $application = DB::transaction(function () use ($tenant, $validated, $totalDays, $request) {
+        $application = DB::transaction(function () use ($tenant, $validated, $totalDays, $isHalfDay, $request) {
             $application = TeacherLeaveApplication::create([
                 'tenant_id' => $tenant->id,
                 'teacher_id' => $validated['teacher_id'],
@@ -232,6 +242,9 @@ class LeaveController extends Controller
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
                 'total_days' => $totalDays,
+                'is_half_day' => $isHalfDay,
+                'half_day_session' => $validated['half_day_session'] ?? null,
+                'is_emergency' => $validated['is_emergency'] ?? false,
                 'reason' => $validated['reason'],
                 'status' => TeacherLeaveApplication::STATUS_PENDING,
                 'created_by' => $request->user()->id,
@@ -288,6 +301,8 @@ class LeaveController extends Controller
                         'remaining_days' => $balance->total_days - $updatedUsed,
                     ]);
                 }
+
+                $this->attendance->applyLeaveToAttendance($application->fresh());
             }
         });
 
@@ -311,7 +326,28 @@ class LeaveController extends Controller
             ], 422);
         }
 
-        $application->update(['status' => TeacherLeaveApplication::STATUS_CANCELLED]);
+        $wasApproved = $application->status === TeacherLeaveApplication::STATUS_APPROVED;
+
+        DB::transaction(function () use ($application, $wasApproved) {
+            $application->update(['status' => TeacherLeaveApplication::STATUS_CANCELLED]);
+
+            if ($wasApproved) {
+                $balance = TeacherLeaveBalance::where('teacher_id', $application->teacher_id)
+                    ->where('leave_type_id', $application->leave_type_id)
+                    ->where('academic_year_id', $application->academic_year_id)
+                    ->first();
+
+                if ($balance) {
+                    $restoredUsed = max(0, $balance->used_days - $application->total_days);
+                    $balance->update([
+                        'used_days' => $restoredUsed,
+                        'remaining_days' => $balance->total_days - $restoredUsed,
+                    ]);
+                }
+
+                $this->attendance->removeLeaveFromAttendance($application);
+            }
+        });
 
         return response()->json([
             'status' => 'success',

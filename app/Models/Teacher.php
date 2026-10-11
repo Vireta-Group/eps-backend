@@ -117,4 +117,14 @@ class Teacher extends Model
     {
         return $this->hasMany(TeacherLeaveApplication::class);
     }
+
+    public function salaries(): HasMany
+    {
+        return $this->hasMany(TeacherSalary::class);
+    }
+
+    public function payslips(): HasMany
+    {
+        return $this->hasMany(TeacherPayslip::class);
+    }
 }
