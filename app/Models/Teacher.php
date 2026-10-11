@@ -127,4 +127,14 @@ class Teacher extends Model
     {
         return $this->hasMany(TeacherPayslip::class);
     }
+
+    public function separations(): HasMany
+    {
+        return $this->hasMany(TeacherSeparation::class);
+    }
+
+    public function settlements(): HasMany
+    {
+        return $this->hasMany(TeacherSettlement::class);
+    }
 }

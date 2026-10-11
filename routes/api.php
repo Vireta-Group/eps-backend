@@ -22,6 +22,8 @@ use App\Http\Controllers\Api\StudentTimelineController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TeacherAttendanceController;
 use App\Http\Controllers\Api\TeacherController;
+use App\Http\Controllers\Api\TeacherSeparationController;
+use App\Http\Controllers\Api\TeacherSettlementController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use App\Http\Controllers\Api\TransferCertificateController;
 use Illuminate\Support\Facades\Route;
@@ -308,5 +310,27 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/payslips', 'payslips');
         Route::post('/payslips/generate', 'generatePayslips');
         Route::post('/payslips/{payslip}/mark-paid', 'markPaid')->whereUuid('payslip');
+    });
+
+    Route::prefix('teacher-separations')->controller(TeacherSeparationController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{separation}', 'show')->whereUuid('separation');
+        Route::post('/{separation}/review', 'review')->whereUuid('separation');
+        Route::post('/{separation}/withdraw', 'withdraw')->whereUuid('separation');
+        Route::get('/{separation}/documents', 'documents')->whereUuid('separation');
+        Route::post('/{separation}/documents', 'storeDocument')->whereUuid('separation');
+        Route::post('/{separation}/documents/{document}/delete', 'deleteDocument')->whereUuid('separation')->whereUuid('document');
+        Route::get('/{separation}/letter', 'letter')->whereUuid('separation');
+    });
+
+    Route::prefix('teacher-settlements')->controller(TeacherSettlementController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/preview', 'preview');
+        Route::post('/', 'store');
+        Route::get('/{settlement}', 'show')->whereUuid('settlement');
+        Route::post('/{settlement}/approve', 'approve')->whereUuid('settlement');
+        Route::post('/{settlement}/pay', 'pay')->whereUuid('settlement');
+        Route::get('/{settlement}/receipt', 'receipt')->whereUuid('settlement');
     });
 });
