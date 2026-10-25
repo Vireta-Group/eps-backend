@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\TeacherAttendanceController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\TeacherSeparationController;
 use App\Http\Controllers\Api\TeacherSettlementController;
+use App\Http\Controllers\Api\RecruitmentController;
+use App\Http\Controllers\Api\OnboardingController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use App\Http\Controllers\Api\TransferCertificateController;
 use Illuminate\Support\Facades\Route;
@@ -332,5 +334,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{settlement}/approve', 'approve')->whereUuid('settlement');
         Route::post('/{settlement}/pay', 'pay')->whereUuid('settlement');
         Route::get('/{settlement}/receipt', 'receipt')->whereUuid('settlement');
+    });
+
+    Route::prefix('recruitment')->controller(RecruitmentController::class)->group(function () {
+        Route::get('/jobs', 'index');
+        Route::post('/jobs', 'store');
+        Route::post('/apply', 'apply');
+        Route::get('/jobs/{jobPost}/applications', 'applications')->whereUuid('jobPost');
+        Route::post('/applications/{application}/status', 'updateStatus')->whereUuid('application');
+        Route::post('/applications/{application}/interview', 'scheduleInterview')->whereUuid('application');
+        Route::post('/interviews/{schedule}/feedback', 'submitFeedback')->whereUuid('schedule');
+        Route::post('/applications/{application}/offer', 'sendOffer')->whereUuid('application');
+        Route::post('/offers/{offer}/response', 'offerResponse')->whereUuid('offer');
+    });
+
+    Route::prefix('onboarding')->controller(OnboardingController::class)->group(function () {
+        Route::get('/{application}/tasks', 'index')->whereUuid('application');
+        Route::post('/{application}/tasks', 'store')->whereUuid('application');
+        Route::post('/tasks/{task}/complete', 'complete')->whereUuid('task');
+        Route::delete('/tasks/{task}', 'destroy')->whereUuid('task');
     });
 });
