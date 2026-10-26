@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('candidate_application_id')->constrained('candidate_applications')->cascadeOnDelete();
             $table->integer('round_number')->default(1);
-            $//L_..._interview_type' la l'intervue type (In-person, Phone, Video)
+            // Interview type (In-person, Phone, Video)
             $table->string('interview_type', 50); 
             $table->datetime('scheduled_at');
             $table->string('meeting_link')->nullable();

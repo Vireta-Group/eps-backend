@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('staff_leave_applications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
-            $table->morphs('staff'); // teacher_id or employee_id
-            $table->foreignUuid('leave_type_id')->constrained('staff_leave_types')->cascadeOnDelete();
+            $table->uuidMorphs('staff'); // teacher_id or employee_id
+            $table->uuid('leave_type_id');
             $table->uuid('academic_year_id')->nullable();
             $table->date('start_date');
             $table->date('end_date');

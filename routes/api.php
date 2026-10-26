@@ -28,6 +28,15 @@ use App\Http\Controllers\Api\RecruitmentController;
 use App\Http\Controllers\Api\OnboardingController;
 use App\Http\Controllers\Api\TenantRegistrationController;
 use App\Http\Controllers\Api\TransferCertificateController;
+use App\Http\Controllers\Api\AppraisalController;
+use App\Http\Controllers\Api\ExamConfigurationController;
+use App\Http\Controllers\Api\ExamAdmitCardController;
+use App\Http\Controllers\Api\ExamManagementController;
+use App\Http\Controllers\Api\ExamPaperController;
+use App\Http\Controllers\Api\ExamResultController;
+use App\Http\Controllers\Api\HrAnalyticsController;
+use App\Http\Controllers\Api\LoanController;
+use App\Http\Controllers\Api\PayrollController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [TenantRegistrationController::class, 'register']);
@@ -354,4 +363,74 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/tasks/{task}/complete', 'complete')->whereUuid('task');
         Route::delete('/tasks/{task}', 'destroy')->whereUuid('task');
     });
+
+    Route::prefix('exam')->group(function () {
+        Route::get('types', [ExamConfigurationController::class, 'indexTypes']);
+        Route::post('types', [ExamConfigurationController::class, 'storeType']);
+        Route::get('grading-systems', [ExamConfigurationController::class, 'indexGradingSystems']);
+        Route::post('grading-systems', [ExamConfigurationController::class, 'storeGradingSystem']);
+        Route::post('grading-systems/{system}/rules', [ExamConfigurationController::class, 'storeGradingRule'])->whereUuid('system');
+        Route::post('subject-configs', [ExamConfigurationController::class, 'storeSubjectConfig']);
+        Route::post('calculate-grade', [ExamConfigurationController::class, 'calculate']);
+        Route::get('calendars', [ExamManagementController::class, 'indexCalendars']);
+        Route::post('calendars', [ExamManagementController::class, 'storeCalendar']);
+        Route::get('schedules', [ExamManagementController::class, 'indexSchedules']);
+        Route::post('schedules', [ExamManagementController::class, 'storeSchedule']);
+        Route::post('schedules/{schedule}/seating/auto-allocate', [ExamManagementController::class, 'autoAllocateSeating'])->whereUuid('schedule');
+        Route::get('rooms', [ExamManagementController::class, 'indexRooms']);
+        Route::post('rooms', [ExamManagementController::class, 'storeRoom']);
+        Route::get('papers', [ExamPaperController::class, 'index']);
+        Route::post('papers', [ExamPaperController::class, 'generate']);
+        Route::get('papers/{paper}', [ExamPaperController::class, 'show'])->whereUuid('paper');
+        Route::get('admit-cards', [ExamAdmitCardController::class, 'index']);
+        Route::post('admit-cards', [ExamAdmitCardController::class, 'generate']);
+        Route::post('admit-cards/bulk-generate', [ExamAdmitCardController::class, 'bulkGenerate']);
+        Route::post('admit-cards/verify', [ExamAdmitCardController::class, 'verify']);
+        Route::get('marks', [ExamResultController::class, 'indexMarks']);
+        Route::post('marks/bulk', [ExamResultController::class, 'enterMarks']);
+        Route::post('marks/{mark}/verify', [ExamResultController::class, 'verifyMark'])->whereUuid('mark');
+        Route::get('results', [ExamResultController::class, 'indexResults']);
+        Route::post('results/publish', [ExamResultController::class, 'publishResults']);
+        Route::get('results/{result}', [ExamResultController::class, 'showResult'])->whereUuid('result');
+    });
+    Route::prefix('payroll')->group(function () {
+        Route::get('processes', [PayrollController::class, 'indexProcesses']);
+        Route::get('processes/{id}', [PayrollController::class, 'showProcess']);
+        Route::post('bulk-process', [PayrollController::class, 'processBulk']);
+        Route::post('bulk-lock/{id}', [PayrollController::class, 'lockProcess']);
+        Route::get('components', [PayrollController::class, 'indexComponents']);
+        Route::post('components', [PayrollController::class, 'storeComponent']);
+        Route::get('grades', [PayrollController::class, 'indexGrades']);
+        Route::post('grades', [PayrollController::class, 'storeGrade']);
+        Route::get('tax-slabs', [PayrollController::class, 'indexTaxSlabs']);
+        Route::post('tax-slabs', [PayrollController::class, 'storeTaxSlab']);
+        Route::post('calculate-preview', [PayrollController::class, 'calculatePreview']);
+    });
+
+    Route::prefix('loans')->group(function () {
+        Route::get('/', [LoanController::class, 'index']);
+        Route::post('/', [LoanController::class, 'store']);
+        Route::get('/{loan}', [LoanController::class, 'show'])->whereUuid('loan');
+        Route::post('/{loan}/approve', [LoanController::class, 'approve'])->whereUuid('loan');
+    });
+
+    Route::prefix('appraisal')->group(function () {
+        Route::get('kpis', [AppraisalController::class, 'indexKpis']);
+        Route::post('kpis', [AppraisalController::class, 'storeKpi']);
+        Route::post('submit-review', [AppraisalController::class, 'submitReview']);
+        Route::post('finalize-review/{review}', [AppraisalController::class, 'finalizeReview'])->whereUuid('review');
+        Route::post('grant-increment/{review}', [AppraisalController::class, 'grantIncrement'])->whereUuid('review');
+        Route::get('reviews', [AppraisalController::class, 'indexReviews']);
+    });
+
+    Route::prefix('hr-analytics')->group(function () {
+        Route::get('dashboard', [HrAnalyticsController::class, 'dashboard']);
+        Route::get('payroll-cost', [HrAnalyticsController::class, 'payrollCostAnalysis']);
+    });
+
 });
+
+
+
+
+

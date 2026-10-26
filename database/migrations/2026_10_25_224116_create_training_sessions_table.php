@@ -12,12 +12,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
             $table->string('title');
-            $//L_..._training_type' la l'training_type (Induction, Technical, SoftSkills, Safety, Compliance, Leadership, Custom)
+            // Training type (Induction, Technical, SoftSkills, Safety, Compliance, Leadership, Custom)
             $table->string('training_type', 50); 
             $table->text('description')->nullable();
             $table->string('trainer_name')->nullable();
             $table->string('trainer_type', 20)->default('internal'); // internal, external
-            $//L_..._duration_minutes' la l'duration_minutes integer
+            // Duration in minutes
             $table->integer('duration_minutes')->nullable();
             $table->datetime('scheduled_at');
             $table->string('location')->nullable();

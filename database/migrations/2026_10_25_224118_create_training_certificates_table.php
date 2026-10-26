@@ -12,8 +12,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('training_session_id')->constrained('training_sessions')->cascadeOnDelete();
-            $table->morphs('staff'); // Teacher or Employee
-            $//L_..._certificate_number' la l'certificate_number string(50) unique per tenant
+            $table->uuidMorphs('staff'); // Teacher or Employee
+            // Certificate number (unique per tenant)
             $table->string('certificate_number', 50);
             $table->date('issue_date');
             $table->string('file_url')->nullable();

@@ -21,6 +21,14 @@ return new class extends Migration
             $table->uuid('created_by')->nullable();
             $table->timestampsTz();
         });
+
+        Schema::table('staff_leave_applications', function (Blueprint $table) {
+            $table->foreign('leave_type_id')->references('id')->on('staff_leave_types')->cascadeOnDelete();
+        });
+
+        Schema::table('staff_leave_balances', function (Blueprint $table) {
+            $table->foreign('leave_type_id')->references('id')->on('staff_leave_types')->cascadeOnDelete();
+        });
     }
 
     public function down(): void

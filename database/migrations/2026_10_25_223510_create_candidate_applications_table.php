@@ -31,6 +31,10 @@ return new class extends Migration
             $table->index(['tenant_id', 'job_post_id']);
             $table->index('status');
         });
+
+        Schema::table('onboarding_checklists', function (Blueprint $table) {
+            $table->foreign('candidate_application_id')->references('id')->on('candidate_applications')->cascadeOnDelete();
+        });
     }
 
     public function down(): void

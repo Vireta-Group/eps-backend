@@ -18,13 +18,17 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
-            $table->foreignUuid('parent_id')->nullable()->constrained('departments')->nullOnDelete();
+            $table->uuid('parent_id')->nullable();
             $table->uuid('head_id')->nullable(); 
             $table->uuid('created_by')->nullable();
             $table->timestampsTz();
 
             $table->index(['tenant_id', 'type']);
             $table->index('parent_id');
+        });
+
+        Schema::table('departments', function (Blueprint $table) {
+            $table->foreign('parent_id')->references('id')->on('departments')->nullOnDelete();
         });
     }
 

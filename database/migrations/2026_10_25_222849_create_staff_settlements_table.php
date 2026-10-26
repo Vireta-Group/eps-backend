@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('staff_settlements', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
-            $table->morphs('staff'); // teacher_id or employee_id
+            $table->uuidMorphs('staff'); // teacher_id or employee_id
             $table->date('last_working_day');
             $table->jsonb('components')->nullable();
             $table->decimal('gross_amount', 12, 2)->default(0);

@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('tenant_contacts', function (Blueprint $table) {
-            $table->string('name_bn', 200)->nullable()->change();
-        });
+        if (Schema::hasTable('tenant_contacts')) {
+            Schema::table('tenant_contacts', function (Blueprint $table) {
+                $table->string('name_bn', 200)->nullable()->change();
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('tenant_contacts', function (Blueprint $table) {
-            $table->string('name_bn', 200)->nullable(false)->change();
-        });
+        if (Schema::hasTable('tenant_contacts')) {
+            Schema::table('tenant_contacts', function (Blueprint $table) {
+                $table->string('name_bn', 200)->nullable(false)->change();
+            });
+        }
     }
 };

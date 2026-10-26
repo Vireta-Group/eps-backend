@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('onboarding_checklists', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('candidate_application_id')->constrained('candidate_applications')->cascadeOnDelete();
+            $table->uuid('candidate_application_id');
             $table->string('task_name');
             $table->string('category', 50); // document, account, hardware, orientation
             $table->boolean('is_completed')->default(false);

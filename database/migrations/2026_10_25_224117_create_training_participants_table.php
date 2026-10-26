@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('training_session_id')->constrained('training_sessions')->cascadeOnDelete();
-            $table->morphs('staff'); // Teacher or Employee
+            $table->uuidMorphs('staff'); // Teacher or Employee
             $table->string('status', 20)->default('enrolled'); // enrolled, attended, absent, completed
             $table->timestampTz('attended_at')->nullable();
             $table->text('feedback')->nullable();
