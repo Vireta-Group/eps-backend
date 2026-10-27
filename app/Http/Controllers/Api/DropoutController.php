@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-#[Group('Student Management > Dropout', description: 'Record dropouts, readmissions, and analytics.', weight: 58)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class DropoutController extends Controller
 {
     /**

@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-#[Group('HR Management > Analytics', description: 'High-level HR analytics and financial reports.', weight: 68)]
+#[Group('HR Management', description: 'Payroll, staff loans, performance appraisal, and HR analytics.', weight: 90)]
 class HrAnalyticsController extends Controller
 {
     /**

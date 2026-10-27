@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('HR Management > Performance Appraisal', description: 'Manage KPIs, performance reviews, and salary increments.', weight: 67)]
+#[Group('HR Management', description: 'Payroll, staff loans, performance appraisal, and HR analytics.', weight: 90)]
 class AppraisalController extends Controller
 {
     /**

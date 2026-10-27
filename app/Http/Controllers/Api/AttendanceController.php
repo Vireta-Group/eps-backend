@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Attendance', weight: 54)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class AttendanceController extends Controller
 {
     // ── Periods ─────────────────────────────────────────────────────────

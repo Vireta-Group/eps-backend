@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Recruitment & Onboarding > Recruitment', description: 'Manage job posts, candidate applications, interviews, and offer letters.', weight: 66)]
+#[Group('Recruitment & Onboarding', description: 'Job posts, candidate applications, interviews, offer letters, and onboarding.', weight: 80)]
 class RecruitmentController extends Controller
 {
     /**

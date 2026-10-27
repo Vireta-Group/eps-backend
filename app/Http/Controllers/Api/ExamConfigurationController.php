@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Exam Management > Configuration', description: 'Manage exam types, grading systems, and subject-specific configs.', weight: 51)]
+#[Group('Exam Management', description: 'Exam configuration, schedules, seating, question bank, papers, admit cards, marks, and results.', weight: 100)]
 class ExamConfigurationController extends Controller
 {
     public function __construct(

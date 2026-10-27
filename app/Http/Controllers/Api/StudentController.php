@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Profile', description: 'Manage student profiles, admission, section assignment, and roll numbers.', weight: 51)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class StudentController extends Controller
 {
     /**
@@ -647,7 +647,7 @@ class StudentController extends Controller
         ]);
     }
 
-    #[Group('Student Management > Guardians', weight: 52)]
+    #[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
     /**
      * List guardians for a student.
      *
@@ -663,7 +663,7 @@ class StudentController extends Controller
         ]);
     }
 
-    #[Group('Student Management > Guardians', weight: 52)]
+    #[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
     /**
      * Add a guardian to a student.
      *
@@ -708,7 +708,7 @@ class StudentController extends Controller
         ], 201);
     }
 
-    #[Group('Student Management > Guardians', weight: 52)]
+    #[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
     /**
      * Set a guardian as the primary guardian for a student.
      *
@@ -738,7 +738,7 @@ class StudentController extends Controller
         ]);
     }
 
-    #[Group('Student Management > Guardians', weight: 52)]
+    #[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
     /**
      * Soft-delete a guardian.
      *

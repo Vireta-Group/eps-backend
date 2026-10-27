@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-#[Group('Exam Management', description: 'Manage exams, schedules, rooms, seating, and calendars.', weight: 62)]
+#[Group('Exam Management', description: 'Exam configuration, schedules, seating, question bank, papers, admit cards, marks, and results.', weight: 100)]
 class ExamManagementController extends Controller
 {
     public function __construct(

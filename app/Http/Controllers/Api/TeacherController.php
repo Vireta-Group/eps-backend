@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Teacher Management > Profile', description: 'Manage teacher profiles, qualifications, trainings, experiences, and documents.', weight: 61)]
+#[Group('Teacher Management', description: 'Teacher profiles, attendance, leave, salary, transfer, and resignation.', weight: 60)]
 class TeacherController extends Controller
 {
     /**

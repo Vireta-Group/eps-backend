@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-#[Group('Employee Management > Training', description: 'Manage staff training sessions, enrollment, and certification.', weight: 68)]
+#[Group('Employee Management', description: 'Non-teaching staff profiles, departments, training, and documents.', weight: 70)]
 class TrainingController extends Controller
 {
     /**

@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-#[Group('Student Management > Reports', description: 'Admission, student summary, attendance, and health analytics.', weight: 59)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class ReportController extends Controller
 {
     /**

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-#[Group('Registration', weight: 10)]
+#[Group('Registration', description: 'Tenant registration and signup.', weight: 10)]
 class TenantRegistrationController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse

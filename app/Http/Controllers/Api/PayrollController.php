@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('HR Management > Payroll', description: 'Manage salary components, grades, tax slabs, and payroll processing.', weight: 65)]
+#[Group('HR Management', description: 'Payroll, staff loans, performance appraisal, and HR analytics.', weight: 90)]
 class PayrollController extends Controller
 {
     public function __construct(

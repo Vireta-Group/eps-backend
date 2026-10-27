@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Teacher Management > Transfer & Resignation', description: 'Manage teacher resignations, terminations, documents, and final settlements.', weight: 65)]
+#[Group('Teacher Management', description: 'Teacher profiles, attendance, leave, salary, transfer, and resignation.', weight: 60)]
 class TeacherSettlementController extends Controller
 {
     public function __construct(private TeacherSeparationService $separation)

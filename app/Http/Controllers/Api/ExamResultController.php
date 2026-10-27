@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-#[Group('Exam Management > Marks & Results', description: 'Enter marks, verify them, and publish final results.', weight: 64)]
+#[Group('Exam Management', description: 'Exam configuration, schedules, seating, question bank, papers, admit cards, marks, and results.', weight: 100)]
 class ExamResultController extends Controller
 {
     public function __construct(

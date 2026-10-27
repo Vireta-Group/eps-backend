@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management > Sections', description: 'Manage class sections with shift type (Morning/Day/Evening).', weight: 43)]
+#[Group('Academic Management', description: 'Academic years, classes, sections, and subjects.', weight: 40)]
 class SectionController extends Controller
 {
     /**

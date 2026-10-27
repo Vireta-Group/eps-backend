@@ -15,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Health', weight: 56)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class HealthController extends Controller
 {
     private function ensureTenantOwnership(Request $request, mixed $model): void

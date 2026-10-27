@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Profile', description: 'Manage student profiles, admission, section assignment, and roll numbers.', weight: 51)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class StudentDocumentController extends Controller
 {
     /**

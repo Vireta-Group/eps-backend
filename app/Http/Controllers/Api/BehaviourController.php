@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Behaviour & Discipline', weight: 55)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class BehaviourController extends Controller
 {
     private function ensureTenantOwnership(Request $request, mixed $model): void

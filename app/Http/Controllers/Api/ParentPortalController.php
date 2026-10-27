@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Student Management > Parent Portal', description: 'Parent login, multi-child dashboard, and notification preferences.', weight: 53)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class ParentPortalController extends Controller
 {
     /**

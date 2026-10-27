@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Recruitment & Onboarding > Onboarding', description: 'Manage the onboarding process for newly hired staff.', weight: 67)]
+#[Group('Recruitment & Onboarding', description: 'Job posts, candidate applications, interviews, offer letters, and onboarding.', weight: 80)]
 class OnboardingController extends Controller
 {
     /**

@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management > Academic Years', description: 'Manage academic years, activate, archive, and copy data.', weight: 41)]
+#[Group('Academic Management', description: 'Academic years, classes, sections, and subjects.', weight: 40)]
 class AcademicYearController extends Controller
 {
     private const COPY_SCOPES = [

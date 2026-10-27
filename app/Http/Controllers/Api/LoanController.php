@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('HR Management > Loans', description: 'Manage staff loans and EMI schedules.', weight: 66)]
+#[Group('HR Management', description: 'Payroll, staff loans, performance appraisal, and HR analytics.', weight: 90)]
 class LoanController extends Controller
 {
     public function __construct(

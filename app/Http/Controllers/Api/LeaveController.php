@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Teacher Management > Leave Management', weight: 63)]
+#[Group('Teacher Management', description: 'Teacher profiles, attendance, leave, salary, transfer, and resignation.', weight: 60)]
 class LeaveController extends Controller
 {
     public function __construct(private TeacherAttendanceService $attendance)

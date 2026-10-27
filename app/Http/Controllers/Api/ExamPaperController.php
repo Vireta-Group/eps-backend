@@ -9,7 +9,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-#[Group('Exam Management > Question Bank', description: 'Manage question bank and auto-generate exam papers.', weight: 63)]
+#[Group('Exam Management', description: 'Exam configuration, schedules, seating, question bank, papers, admit cards, marks, and results.', weight: 100)]
 class ExamPaperController extends Controller
 {
     public function __construct(

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-#[Group('Employee Management > Profile', description: 'Manage non-teaching staff profiles, departments, and documents.', weight: 61)]
+#[Group('Employee Management', description: 'Non-teaching staff profiles, departments, training, and documents.', weight: 70)]
 class EmployeeController extends Controller
 {
     /**

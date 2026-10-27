@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-#[Group('Academic Management > Subjects', description: 'Manage subjects with type (Theory/Practical/Both).', weight: 44)]
+#[Group('Academic Management', description: 'Academic years, classes, sections, and subjects.', weight: 40)]
 class SubjectController extends Controller
 {
     /**

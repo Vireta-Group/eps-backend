@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-#[Group('Student Management > Transfer Certificate', description: 'Issue, receive, verify and manage Transfer Certificates (TC).', weight: 57)]
+#[Group('Student Management', description: 'Student profiles, guardians, attendance, health, behaviour, dropout, transfer certificates, and reports.', weight: 50)]
 class TransferCertificateController extends Controller
 {
     /**
